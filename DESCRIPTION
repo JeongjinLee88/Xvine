@@ -1,0 +1,18 @@
+Package: Xvine
+Title: Statistical Modelling for Multivariate Extremes via Vine Structures
+Version: 0.0.0.9000
+Authors@R: 
+    c(person("Jeongjin", "Lee", , "stecophil88@gmail.com", role = c("aut", "cre"),
+           comment = c(ORCID = "0000-0001-5655-3358")),
+    person("Anna", "Kiriliouk", , "anna.kiriliouk@unamur.be", role = c("aut"),
+           comment = c(ORCID = "0000-0003-2977-0140")),
+    person("Johan", "Segers", , "johan.segers@uclouvain.be", role = c("aut"),
+           comment = c(ORCID = "0000-0002-0444-689X")))
+Description: What the package does (one paragraph).
+License: `use_mit_license()`, `use_gpl3_license()` or friends to pick a
+    license
+Encoding: UTF-8
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.2.3
+URL: https://github.com/JeongjinLee88/Xvine
+BugReports: https://github.com/JeongjinLee88/Xvine/issues
