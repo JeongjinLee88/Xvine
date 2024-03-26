@@ -24,7 +24,7 @@ Numeric; a negative log-likelihood value
 }
 \description{
 \code{LL.BiTC} calculates a negative log-likelihood of a bivariate tail copula density \eqn{r} on product space with uniform margins.
-As the bivariate tail copula \eqn{r(x1,x2)} with \eqn{x2<1} corresponds to the bivariate inverted-Pareto density,
+As the bivariate tail copula \eqn{r(x_1,x_2)} with \eqn{x_2<1} corresponds to the bivariate inverted-Pareto density,
 the normalizing constant can be ignored because it is 1.
 This function is passed to the function \code{mleBiTC()} for finding ML estimates.
 }
