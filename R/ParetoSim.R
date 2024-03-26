@@ -1,19 +1,20 @@
 #' Simulation from multivariate Pareto distribution
 #'
 #' @description
-#' `ParetoSim()` generates samples from multivariate Pareto distribution by rejection sampling.
+#' `ParetoSim()` generates multivariate Pareto random samples with Pareto margins by rejection sampling.
 #' Drawing uniform samples from \eqn{k \in {1,\ldots,d}}, 
 #' the \eqn{k}th conditioning index 'k' is passed to the function [XVineSim()]
 #'  and then calculate its extremal function.
 #'  For more details on the X-vine simulation algorithm, refer to Kiriliouk, A., Lee, J., & Segers, J. (2023).
 #' For more details on the exact simulation algorithm, refer to Engelke, S., & Hitz, A. S. (2020).
 #' @param n Integer; the number of d-dimensional observations to generate
-#' @param XVS A list of three components: 
-#' * permuted structure matrices.
-#' * permuted family matrices.
-#' * permuted parameter matrices.
+#' @param XVS A list of three matrix components for each conditioning variable:
+#' * reproduced structure matrices
+#' * family matrices
+#' * parameter matrices
+#' For more details on the specification of the argument `XVS`, see [XVineSpec()].
 #'
-#' @return A \eqn{n\times d} data matrix of multivariate Pareto samples.
+#' @return An \eqn{n\times d} data matrix of multivariate Pareto samples with Pareto margins.
 #' @export
 #' @references Kiriliouk, A., Lee, J., & Segers, J. (2023). X-Vine Models for Multivariate Extremes. arXiv preprint arXiv:2312.15205.
 #' 
@@ -41,7 +42,7 @@
 #'                    
 #' ##  X-Vine specification
 #' XVS=XVineSpec(M = StrMtx, Mmod = FamMtx, Mpar = ParMtx)
-#' ##  Generate samples from multivariate Pareto distribution
+#' ##  Generate multivariate Pareto random samples
 #' Dat_P=ParetoSim(n = 5000, XVS = XVS)
 ParetoSim <- function(n, XVS){
   

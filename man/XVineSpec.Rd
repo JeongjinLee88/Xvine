@@ -2,7 +2,7 @@
 % Please edit documentation in R/XVineSpec.R
 \name{XVineSpec}
 \alias{XVineSpec}
-\title{Permute the provided X-vine matrix specification}
+\title{Reproduce the given X-vine matrix specification depending on each conditioning variable}
 \usage{
 XVineSpec(M, Mmod, Mpar)
 }
@@ -17,25 +17,27 @@ bivariate (tail) copulas.}
 \value{
 A list of arrays includes:
 \itemize{
-\item xmat: array of dimension \eqn{d \times d \times d} containing permuted X-vine structure matrices.
-\item fmat: array of dimension \eqn{d \times d \times d} containing permuted family matrices.
-\item pmat: array of dimension \eqn{d \times d \times d} containing permuted parameter matrices.
-\item xedge: A list of edges corresponding to the first structure matrix.
+\item xmat: array of dimension \eqn{d \times d \times d} containing rearranged X-vine structure matrices.
+\item fmat: array of dimension \eqn{d \times d \times d} containing family matrices associated with the structure matrices.
+\item pmat: array of dimension \eqn{d \times d \times d} containing parameter matrices associated with the structure matrices.
+\item xedge: A list of edges corresponding to the initial structure matrix.
 }
 }
 \description{
-Given the initial X-vine matrix specification (structure matrix, family matrix, parameter matrix),
-\code{XVineSpec()} generates a list of permuted structure matrices.
-These permutations ensure that the first diagonal element, denoted as \eqn{m_{11}}, is in \eqn{[d]} in order.
-Subsequently, \code{XVineSpec()} constructs the corresponding X-vine matrix specifications based on these permutations.
+Given the initial X-vine matrix specification of (structure matrix, family matrix, parameter matrix),
+\code{XVineSpec()} generates a list of redefined X-vine specifications for each conditioning variable.
+Preserving the vine structure, the function reconstructs structure matrices where the first diagonal element
+, denoted as \eqn{m_{11}\in [d]}, corresponds to the conditioning variable.
+Additionally, \code{XVineSpec()} includes the associated parameter and family matrices based on the given structure matrices.
 }
 \details{
-To use the exact simulation for multivariate Pareto distribution, we need to condition on
-each variable being greater than 1. Without loss of generality, we arrange the order of the conditioned variable as \eqn{{1,\ldots,d}}
-Thus, the first diagonal element of permuted structure matrices corresponds to \eqn{{1,\ldots,d}}.
-All the permuted structure matrices maintain the same vine tree structure with diagonal elements being permuted accordingly.
-In the family matrix, the first row specifies bivariate tail copulas and the remaining rows specify bivariate copulas.
-The parameter matrix contains the parameter values for the bivariate (tail) copulas associated with each edge in the vine tree sequence.
+To use the exact simulation algorithm for multivariate Pareto distribution in Engelke and Hitz (2020) and Kiriliouk et al. (2023),
+we condition on each variable to calculate extremal functions.
+For each conditioning variable, the index of the conditioning variable is placed on the first diagonal element in the structure matrix.
+Specifically, in a \eqn{d \times d} structure matrix, the element \eqn{m_{jj}\in [d]} corresponds to the index of the conditioning variable \eqn{X_j} for \eqn{j=1,\ldots,d}.
+All reproduced structure matrices maintain the same vine tree structure.
+The corresponding parameter matrices contain the parameter values for the bivariate (tail) copulas.
+In family matrices, the first row specifies bivariate tail copulas and the remaining rows specify bivariate copulas.
 }
 \examples{
 ##  A 6 x 6 structure matrix
@@ -73,4 +75,7 @@ cbind(PermTrucXVine[[1]][,,5],PermTrucXVine[[2]][,,5]) #compare with cbind(M,Mmo
 Kiriliouk, A., Lee, J., & Segers, J. (2023). X-Vine Models for Multivariate Extremes. arXiv preprint arXiv:2312.15205.
 
 Engelke, S., & Hitz, A. S. (2020). Graphical models for extremes. Journal of the Royal Statistical Society Series B: Statistical Methodology, 82(4), 871-932.
+}
+\seealso{
+\code{VineEdges()}
 }

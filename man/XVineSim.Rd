@@ -9,20 +9,26 @@ XVineSim(N, XVS, k)
 \arguments{
 \item{N}{Integer; the number of samples to simulate.}
 
-\item{XVS}{A list of three different matrices: permuted structure matrices, family matrices, and parameter matrices.}
+\item{XVS}{A list of three matrix components for each conditioning variable:
+\itemize{
+\item reproduced structure matrices
+\item family matrices
+\item parameter matrices.
+To specify the argument \code{XVS}, see \code{\link[=XVineSpec]{XVineSpec()}}.
+}}
 
 \item{k}{Integer; the \eqn{k}th, \eqn{k\in {1,\ldots,d}}, conditioning index to condition on.}
 }
 \value{
-A \eqn{N\times d} sample matrix used to calculate extremal functions in \code{\link[=ParetoSim]{ParetoSim()}}.
+An \eqn{N\times d} data matrix used to calculate extremal functions in \code{\link[=ParetoSim]{ParetoSim()}}.
 }
 \description{
 \code{XVineSim()} generates multivariate samples from X-Vine models
 given one of the variables is less than 1.
 The simulation algorithm selects the X-vine specification
 associated with the conditioned variable and uses
-recursive approaches to return a \eqn{N \times d} data matrix.
-For more deatils on simulation algorithms, refer to Kiriliouk, A., Lee, J., & Segers, J. (2023)
+recursive approaches to return an \eqn{N \times d} data matrix.
+For more details on simulation algorithms, refer to Kiriliouk, A., Lee, J., & Segers, J. (2023)
 }
 \examples{
 ##  A 5-dim X-vine model

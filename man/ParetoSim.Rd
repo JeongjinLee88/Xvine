@@ -9,18 +9,19 @@ ParetoSim(n, XVS)
 \arguments{
 \item{n}{Integer; the number of d-dimensional observations to generate}
 
-\item{XVS}{A list of three components:
+\item{XVS}{A list of three matrix components for each conditioning variable:
 \itemize{
-\item permuted structure matrices.
-\item permuted family matrices.
-\item permuted parameter matrices.
+\item reproduced structure matrices
+\item family matrices
+\item parameter matrices
+For more details on the specification of the argument \code{XVS}, see \code{\link[=XVineSpec]{XVineSpec()}}.
 }}
 }
 \value{
-A \eqn{n\times d} data matrix of multivariate Pareto samples.
+An \eqn{n\times d} data matrix of multivariate Pareto samples with Pareto margins.
 }
 \description{
-\code{ParetoSim()} generates samples from multivariate Pareto distribution by rejection sampling.
+\code{ParetoSim()} generates multivariate Pareto random samples with Pareto margins by rejection sampling.
 Drawing uniform samples from \eqn{k \in {1,\ldots,d}},
 the \eqn{k}th conditioning index 'k' is passed to the function \code{\link[=XVineSim]{XVineSim()}}
 and then calculate its extremal function.
@@ -49,7 +50,7 @@ FamMtx <- matrix(c(0, 1, 2, 3, 4,
                    
 ##  X-Vine specification
 XVS=XVineSpec(M = StrMtx, Mmod = FamMtx, Mpar = ParMtx)
-##  Generate samples from multivariate Pareto distribution
+##  Generate multivariate Pareto random samples
 Dat_P=ParetoSim(n = 5000, XVS = XVS)
 }
 \references{

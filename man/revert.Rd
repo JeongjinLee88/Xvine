@@ -7,11 +7,11 @@
 revert(m)
 }
 \arguments{
-\item{m}{A \eqn{d\times d} lower (or upper) triangular matrix specifying
+\item{m}{A numeric \eqn{d\times d} lower (or upper) triangular matrix specifying
 the regular vine structure.}
 }
 \value{
-A \eqn{d\times d} upper triangular matrix if the input matrix is lower
+A numeric \eqn{d\times d} upper triangular matrix if the input matrix is lower
 triangular; otherwise, it is a lower triangular matrix.
 }
 \description{
@@ -20,12 +20,12 @@ to the corresponding upper (or lower) triangular matrix.
 }
 \examples{
 ##  A 5 x 5 lower triangular structure matrix
-M <- c(5, 2, 3, 1, 4,
+LowerStrMtx <- matrix(c(5, 2, 3, 1, 4,
  0, 2, 3, 4, 1,
  0, 0, 3, 4, 1,
  0, 0, 0, 4, 1,
- 0, 0, 0, 0, 1)
-LowerStrMtx <- matrix(M, 5, 5)
-##  Convert the lower triangular structure matrix to the upper triangular matrix.
+ 0, 0, 0, 0, 1),5,5)
+ 
+##  Convert to the upper triangular matrix
 revert(LowerStrMtx)
 }

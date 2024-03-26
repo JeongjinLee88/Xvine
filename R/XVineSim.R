@@ -5,13 +5,17 @@
 #' given one of the variables is less than 1.
 #'  The simulation algorithm selects the X-vine specification 
 #'  associated with the conditioned variable and uses
-#'  recursive approaches to return a \eqn{N \times d} data matrix.
-#' For more deatils on simulation algorithms, refer to Kiriliouk, A., Lee, J., & Segers, J. (2023)
+#'  recursive approaches to return an \eqn{N \times d} data matrix.
+#' For more details on simulation algorithms, refer to Kiriliouk, A., Lee, J., & Segers, J. (2023)
 #' @param N Integer; the number of samples to simulate.
-#' @param XVS A list of three different matrices: permuted structure matrices, family matrices, and parameter matrices.
+#' @param XVS A list of three matrix components for each conditioning variable:
+#'  * reproduced structure matrices
+#'  * family matrices
+#'  * parameter matrices.
+#'  To specify the argument `XVS`, see [XVineSpec()].
 #' @param k Integer; the \eqn{k}th, \eqn{k\in {1,\ldots,d}}, conditioning index to condition on.
 #'
-#' @return A \eqn{N\times d} sample matrix used to calculate extremal functions in [ParetoSim()].
+#' @return An \eqn{N\times d} data matrix used to calculate extremal functions in [ParetoSim()].
 #' @export
 #'
 #' @references Kiriliouk, A., Lee, J., & Segers, J. (2023). X-Vine Models for Multivariate Extremes. arXiv preprint arXiv:2312.15205.
@@ -51,7 +55,7 @@ XVineSim <- function(N, XVS, k){
   vdirect=vdirect[Diag,Diag,]
   vindirect[1, 1, ] <- vdirect[1, 1, ]
   
-  CondMat=SecondArg(d = d,Rmat = Rmat) #above diagonal elements
+  CondMat=SecondArg(d = d,Rmat = Rmat) # above diagonal elements
   CondMat2=SecondArg2(d = d,Rmat = Rmat)
   if(d > 3){
     CondMat3=SecondArg3(d = d,Rmat = Rmat)
@@ -89,9 +93,9 @@ XVineSim <- function(N, XVS, k){
       
       ##  Evaluate quantile functions and conditional dist
       if(k==1){
-          vdirect[k,i,] <- InvExp(vdirect[k+1,i,], u1, par[k,i],family[k,i]) #lambda^{-1}_{2|1}(w2|u1=x1;gamma)
+          vdirect[k,i,] <- InvTC(vdirect[k+1,i,], u1, par[k,i],family[k,i]) #lambda^{-1}_{2|1}(w2|u1=x1;gamma)
         if (i < d) {
-            vindirect[k+1,i,] <- CondExp(u1, vdirect[k,i,], par[k,i],family[k,i]) #lambda_{1|2}(u1=x1|x2;gamma)
+            vindirect[k+1,i,] <- CondTC(u1, vdirect[k,i,], par[k,i],family[k,i]) #lambda_{1|2}(u1=x1|x2;gamma)
         } 
       }else if(k > 1){
         #vdirect[k,i,] <- InvCop(vdirect[k+1,i,], u1, par[k,i],family[k,i]) #C^{-1}_{2|1}(u2|u1;par)
@@ -111,7 +115,7 @@ XVineSim <- function(N, XVS, k){
       }
     }
   }
-  vdirect_unord=t(vdirect[1, , ])
-  order.new=storeVarInd(Diag = Diag)
-  return(vdirect_unord[,order.new])
+  vdirect_unordered=t(vdirect[1, , ])
+  order.new=varIndexloc(Diag = Diag)
+  return(vdirect_unordered[,order.new])
 }

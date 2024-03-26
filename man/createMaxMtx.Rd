@@ -2,7 +2,7 @@
 % Please edit documentation in R/createMaxMtx.R
 \name{createMaxMtx}
 \alias{createMaxMtx}
-\title{Create a maximum matrix from a given structure matrix}
+\title{Create a maximum matrix from a structure matrix with diagonal elements in ascending order}
 \usage{
 createMaxMtx(Matrix)
 }
@@ -14,8 +14,8 @@ the regular vine structure.}
 Numeric \eqn{d \times d} upper triangular max-matrix.
 }
 \description{
-\code{createMaxMtx()} generates a max-matrix based on a structure matrix.
-The max-matrix is used in sequential parameter estimation
+\code{createMaxMtx()} creates a max-matrix from a structure matrix where diagonal elements are put in increasing order.
+This max-matrix is used in sequential parameter estimation
 to determine the appropriate argument for conditional pair-copulas.
 For more details, refer to Chapter 6 in Czado (2019).
 }
