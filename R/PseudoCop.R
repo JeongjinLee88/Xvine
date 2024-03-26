@@ -22,11 +22,7 @@
 #' @export
 PseudoCop <- function(j, cind, data, StrMtx, fam, MaxMtr, Par){
   d <- ncol(data)
-  #M <- XVS$xmat[,,1]
-  #M <- ReorderStrMtx(XVS$xmat[,,1])
-  #fam1 <- XVS$fmat[,,1]
-  #MaxMat <- createMaxMtx(Matrix = M)
-  # For example, if j=2 the number of conditioning variables in D(e), then
+  # if j=2 (the number of conditioning variables in D(e)), then
   # k-> l=1,2 tree levels
   # i-> s=5,4,3,2 / 5,4,3 / 5,4 each column
   VdirC <- list()

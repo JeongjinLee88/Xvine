@@ -33,4 +33,8 @@ A list of two numeric vectors, including two conditional distribution functions 
 \code{PseudoCop} recalculates the conditional distribution function of pair-copulas by conditioning on all variables
 in the conditioning set being less than 1.
 This calculation is based on recursive approaches tree by tree sequentially from \eqn{T_3} to \eqn{T_{d-1}}.
+For more details, refer to Kiriliouk, A., Lee, J., & Segers, J. (2023)
+}
+\references{
+Kiriliouk, A., Lee, J., & Segers, J. (2023). X-Vine Models for Multivariate Extremes. arXiv preprint arXiv:2312.15205.
 }
