@@ -6,6 +6,8 @@ output:
       fig_height: 5
       number_sections: true
       toc: true
+pkgdown:
+  as_is: true
 bibliography: ../sty/references.bib
 vignette: >
   %\VignetteIndexEntry{XvineWorkflow}
