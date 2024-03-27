@@ -1,0 +1,109 @@
+---
+title: "XvineWorkflow"
+output: 
+    bookdown::html_vignette2:
+      fig_width: 5
+      fig_height: 5
+      number_sections: true
+      toc: true
+bibliography: ../sty/references.bib
+vignette: >
+  %\VignetteIndexEntry{XvineWorkflow}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+csl: ../sty/apa-no-ampersand.csl
+---
+
+
+
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+### 1. Load required packages.
+
+The X-Vine package requires other packages: `VineCopula` and `graphicalExtremes`.
+
+```{r, echo=TRUE,message=FALSE,warning=FALSE}
+library(Xvine)
+library(VineCopula)
+library(graphicalExtremes)
+```
+
+
+### 2. X-Vine specification.
+
+The X-Vine specification $(\mathcal{V},\mathcal{R},\mathcal{C})$ consists of three components; vine tree structure matrix, family matrix for bivariate parametric (tail) copula families, and the associated parameter matrix. 
+
+```{r, include=FALSE}
+StrMtx <- matrix(c(1, 1, 2, 2, 4,
+                   0, 2, 1, 3, 2,
+                   0, 0, 3, 1, 3,
+                   0, 0, 0, 4, 1,
+                   0, 0, 0, 0, 5),5,byrow = T)
+ParMtx <- matrix(c(0, 1.5, 2, 2.5, 2,
+                   0, 0, 2, 2.5, 0.7,
+                   0, 0, 0, 0.4, -0.3,
+                   0, 0, 0, 0, 0.1,
+                   0, 0, 0, 0, 0),5,byrow = T)
+FamMtx <- matrix(c(0, 1, 2, 3, 4,
+                   0, 0, 3, 4, 1,
+                   0, 0, 0, 3, 1,
+                   0, 0, 0, 0, 1,
+                   0, 0, 0, 0, 0),5,byrow = T)
+XVS=XVineSpec(M = StrMtx, Mmod = FamMtx, Mpar = ParMtx)
+```
+
+
+### 3. Simulation from X-Vine models.
+
+Given the X-Vine specification $(\mathcal{V},\mathcal{R},\mathcal{C})$, the function `XVineSim` generate random samples from $\boldsymbol{Z}^{(j)}\sim R(\boldsymbol{z})\mathbb{I}(Z^{(j)}<1)$ for each $j=1,\ldots,d$.
+
+```{r, include=FALSE}
+XVineSim(N = 100, XVS = XVS, k = 1)
+```
+
+### 4. Simulation from multivariate Pareto distribution.
+
+To simulate from the X-vine multivariate Pareto distribution $\boldsymbol{Y}_1,\ldots,\boldsymbol{Y}_n$, the function `ParetoSim` follows the exact simulation for multivariate Pareto distribution $\boldsymbol{Y}$, using the X-vine specification.
+We can easily switch multivariate Pareto samples to inverted-Pareto samples by taking the reciprocal of $\boldsymbol{Z}_i=1/\boldsymbol{Y}_i$.
+
+```{r, include=FALSE}
+Dat_P=ParetoSim(n = 5000, XVS = XVS) # Pareto scale
+```
+
+
+### 5. Sequential Parameter Estimation for X-Vine models.
+
+In order to implement the sequential parameter estimation, it is sufficient to use the structure matrix where diagonal elements are put in increasing order.
+That is, we use the first structure matrix from permuted structure matrices and define its corresponding max matrix to find the appropriate arguments for conditional bivariate copula densities.
+
+Given the vine tree structure and selected bivariate parametric families, we implement maximum likelihood methods to estimate parameters and calculate empirical dependence measures for each edge in each tree sequentially.
+
+The function `XVineSeqEst` returns a list of three components:
+
+1. A matrix of parameter estimates for each edge in each tree stored in `Params`.
+
+2. A matrix of dependence measures stored in `DepMeasure`.
+
+3. A matrix of effective sample sizes for each edge in each tree stored in `EffectSamp`.
+
+In the code below, we use either multivariate inverted-Pareto samples from the limiting distribution or the rank-transformed data.
+
+```{r, include=FALSE}
+##  1. Use Pareto samples directly
+#SeqEstOut=XVineSeqEst(data = Dat_P, Rank = FALSE, qt = 0.05, XVS=XVS, method = 'mle')
+##  2. Use rank-based observations
+SeqEstOut=XVineSeqEst(data = Dat_P, Rank = T, qt = 0.05, XVS=XVS, method = 'mle')
+```
+
+####  Compare the matrix of parameter estimates with the specified parameter values
+
+```{r, echo=T}
+round(SeqEstOut$Params,2) # Parameter estimates
+round(XVS$pmat[,,1],2) # Parameter values
+```

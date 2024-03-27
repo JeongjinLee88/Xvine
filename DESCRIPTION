@@ -21,3 +21,7 @@ BugReports: https://github.com/JeongjinLee88/Xvine/issues
 Imports: 
     stats,
     VineCopula
+Suggests: 
+    knitr,
+    rmarkdown
+VignetteBuilder: knitr
