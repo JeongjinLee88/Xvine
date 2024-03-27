@@ -21,6 +21,27 @@
 #' @export
 #'
 #' @examples
+#' StrMtx <- matrix(c(1, 1, 2, 2, 4,
+#' 0, 2, 1, 3, 2,
+#' 0, 0, 3, 1, 3,
+#' 0, 0, 0, 4, 1,
+#' 0, 0, 0, 0, 5),5,byrow = TRUE)
+#' ParMtx <- matrix(c(0, 1.5, 2, 2.5, 2,
+#'                 0, 0, 2, 2.5, 0.7,
+#'                 0, 0, 0, 0.4, -0.3,
+#'                 0, 0, 0, 0, 0.1,
+#'                 0, 0, 0, 0, 0),5,byrow = TRUE)
+#' FamMtx <- matrix(c(0, 1, 2, 3, 4,
+#'                    0, 0, 3, 4, 1,
+#'                    0, 0, 0, 3, 1,
+#'                    0, 0, 0, 0, 1,
+#'                    0, 0, 0, 0, 0),5,byrow = TRUE)
+#' # X-vine speicification
+#' XVS=XVineSpec(M = StrMtx, Mmod = FamMtx, Mpar = ParMtx)
+#' # Pareto random samples
+#' Dat_P=ParetoSim(n = 5000, XVS = XVS) # Pareto scale
+#' # Sequential parameter estimation
+#' SeqEstOut=XVineSeqEst(data = Dat_P, Rank = TRUE, qt = 0.05, XVS=XVS, method = 'mle')
 XVineSeqEst <- function(data, Rank=T, qt=0.2, XVS, method = "mle")
 {
   d <- ncol(data)
