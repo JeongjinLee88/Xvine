@@ -1,49 +1,60 @@
+
 # X-vine models for multivariate extremes
 
+The `Xvine` package is designed to analyze extremal dependence in
+multivariate extremes using the graphical structure of regular vines, as
+described in Kiriliouk et al. (2023). This modelling approach provides
+flexibility and enables exploration of sparsity.
 
-The `Xvine` package is developed to analyze extremal dependence in multivariate extremes using the graphical structure of regular vines.
-This modelling approach provides flexibility and allows for exploring sparsity. 
+Computationally, the package employs recursive approaches based on
+bivariate building blocks. The key components contain simulation from
+X-vine models, sequential parameter estimation, selection of bivariate
+parametric families, and vine structure selection.
 
-Computations proceed via recursive approaches in terms of bivariate building blocks. Some main components in the package contains: simulation from X-vine models, sequential parameter estimation, bivariate parametric family selection, and vine structure selection.
+## Installation
 
-##  Installation
+The [GitHub](https://github.com/JeongjinLee88/Xvine.git) version can be
+downloaded via:
 
-The [GitHub](https://github.com/JeongjinLee88/Xvine.git) version can be downloaded via:
-
-```{r}
+``` r
 #install.packages("devtools")
 devtools::install_github("JeongjinLee88/Xvine")
 ```
 
-##  Workflow
+## Workflow
 
-1. X-vine specification
+1.  X-vine specification
 
-```{r}
+``` r
 XVineSpec(M = StrMtx, Mmod = FamMtx, Mpar = ParMtx)
 ```
 
-2. Simulation from Pareto distribution
+2.  Simulation from Pareto distribution
 
-```{r}
+``` r
 Dat_P=ParetoSim(n = 2000, XVS = XVS) # Pareto scale
 ```
 
-3. Sequential parameter estimation via recursive approaches
+3.  Sequential parameter estimation via recursive approaches
 
-```{r}
+``` r
 XVineSeqEst(data = Dat_P, Rank = T, qt = 0.05, XVS=XVS, method = 'mle')
 ```
 
-4. Parametric family selection
+4.  Parametric family selection
 
-```{r}
+5.  Vine structure selection
 
-```
+## References
 
-5. Vine structure selection
+<div id="refs" class="references csl-bib-body hanging-indent"
+line-spacing="2">
 
-```{r}
+<div id="ref-kiriliouk2023x" class="csl-entry">
 
-```
+Kiriliouk, A., Lee, J., and Segers, J. (2023). X-vine models for
+multivariate extremes. *arXiv Preprint arXiv:2312.15205*.
 
+</div>
+
+</div>

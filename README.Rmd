@@ -1,0 +1,59 @@
+---
+output:
+  github_document:
+    html_preview: false
+output_file: readme.md
+bibliography: sty/references.bib
+csl: ./sty/apa-no-ampersand.csl
+---
+
+# X-vine models for multivariate extremes
+
+
+The `Xvine` package is designed to analyze extremal dependence in multivariate extremes using the graphical structure of regular vines, as described in @kiriliouk2023x.
+This modelling approach provides flexibility and enables exploration of sparsity.
+
+Computationally, the package employs recursive approaches based on bivariate building blocks. The key components contain simulation from X-vine models, sequential parameter estimation, selection of bivariate parametric families, and vine structure selection.
+
+##  Installation
+
+The [GitHub](https://github.com/JeongjinLee88/Xvine.git) version can be downloaded via:
+
+```{r, eval=FALSE}
+#install.packages("devtools")
+devtools::install_github("JeongjinLee88/Xvine")
+```
+
+##  Workflow
+
+1. X-vine specification
+
+```{r, eval=FALSE}
+XVineSpec(M = StrMtx, Mmod = FamMtx, Mpar = ParMtx)
+```
+
+2. Simulation from Pareto distribution
+
+```{r, eval=FALSE}
+Dat_P=ParetoSim(n = 2000, XVS = XVS) # Pareto scale
+```
+
+3. Sequential parameter estimation via recursive approaches
+
+```{r, eval=FALSE}
+XVineSeqEst(data = Dat_P, Rank = T, qt = 0.05, XVS=XVS, method = 'mle')
+```
+
+4. Parametric family selection
+
+```{r, eval=FALSE}
+
+```
+
+5. Vine structure selection
+
+```{r, eval=FALSE}
+
+```
+
+## References
