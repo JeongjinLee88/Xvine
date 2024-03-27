@@ -126,3 +126,4 @@ XVineSeqEst <- function(data, Rank=T, qt=0.2, XVS, method = "mle")
     }
   return(list("Params"=Params,"DepMeasure"=DepMeasure,"EffectSamp"=EffectSamp,"logLiks"=logLiks))
 }
+ 
