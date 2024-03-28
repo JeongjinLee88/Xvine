@@ -42,7 +42,7 @@
 #' Dat_P=ParetoSim(n = 5000, XVS = XVS) # Pareto scale
 #' # Sequential parameter estimation
 #' SeqEstOut=XVineSeqEst(data = Dat_P, Rank = TRUE, qt = 0.05, XVS=XVS, method = 'mle')
-XVineSeqEst <- function(data, Rank=T, qt=0.2, XVS, method = "mle")
+XVineSeqEst <- function(data, Rank=TRUE, qt=0.2, XVS, method = "mle")
 {
   d <- ncol(data)
   ##  Noe that the 'XVineSeqEst' function uses multivariate 'inverted' Pareto samples
