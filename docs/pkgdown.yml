@@ -3,8 +3,5 @@ pkgdown: 2.0.7
 pkgdown_sha: ~
 articles:
   XvineWorkflow: XvineWorkflow.html
-last_built: 2024-03-28T16:39Z
-urls:
-  reference: https://jeongjinlee88.github.io/Xvine/reference
-  article: https://jeongjinlee88.github.io/Xvine/articles
+last_built: 2024-03-28T16:54Z
 

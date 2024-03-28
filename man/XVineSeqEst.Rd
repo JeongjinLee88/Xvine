@@ -4,7 +4,7 @@
 \alias{XVineSeqEst}
 \title{Sequential parameter estimation for X-Vine models}
 \usage{
-XVineSeqEst(data, Rank = T, qt = 0.2, XVS, method = "mle")
+XVineSeqEst(data, Rank = TRUE, qt = 0.2, XVS, method = "mle")
 }
 \arguments{
 \item{data}{An \eqn{n\times d} data matrix from the inverted Pareto distribution. In this case, \code{Rank=T} is not recommended as the rank transformation
