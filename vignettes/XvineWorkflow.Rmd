@@ -33,7 +33,6 @@ The X-Vine package requires other packages: `VineCopula` and `graphicalExtremes`
 ```{r, echo=TRUE,message=FALSE,warning=FALSE}
 library(Xvine)
 library(VineCopula)
-library(graphicalExtremes)
 ```
 
 
