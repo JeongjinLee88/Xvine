@@ -12,6 +12,7 @@ Modeling multivariate extremes via vine structures provides flexibility and spar
 Useful links:
 \itemize{
   \item \url{https://github.com/JeongjinLee88/Xvine}
+  \item \url{https://jeongjinlee88.github.io/Xvine/}
   \item Report bugs at \url{https://github.com/JeongjinLee88/Xvine/issues}
 }
 
