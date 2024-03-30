@@ -36,7 +36,7 @@
 #'                    0, 0, 0, 3, 1,
 #'                    0, 0, 0, 0, 1,
 #'                    0, 0, 0, 0, 0),5,byrow = TRUE)
-#' # X-vine speicification
+#' # X-vine specification
 #' XVS=XVineSpec(M = StrMtx, Mmod = FamMtx, Mpar = ParMtx)
 #' # Pareto random samples
 #' Dat_P=ParetoSim(n = 5000, XVS = XVS) # Pareto scale
