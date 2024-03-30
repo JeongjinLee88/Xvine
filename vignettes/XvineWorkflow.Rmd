@@ -8,12 +8,12 @@ output:
       toc: true
 pkgdown:
   as_is: true
-bibliography: ../sty/references.bib
+bibliography: ../inst/references.bib
 vignette: >
   %\VignetteIndexEntry{XvineWorkflow}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
-csl: ../sty/apa-no-ampersand.csl
+csl: ../inst/apa-no-ampersand.csl
 ---
 
 
