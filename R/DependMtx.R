@@ -65,17 +65,7 @@ DependMtx<- function(XVS)
     }
     if(i > 1){
       for(j in (i+1):d){
-        if(fam1[i,j]==1){ # Gauss
-          DepMtx[i,j]=2/pi*asin(par[i,j])
-        }
-        if(fam1[i,j]==3){ # Clayton
-          DepMtx[i,j]=par[i,j]/(par[i,j]+2)
-        }
-        if(fam1[i,j]==4){ # Gumbel
-          DepMtx[i,j]=1-1/par[i,j]
-        }else{
-          DepMtx[i,j]=VineCopula::BiCopPar2Tau(family = fam1[i,j],par = par[i,j])
-        }
+        DepMtx[i,j]=VineCopula::BiCopPar2Tau(family = fam1[i,j],par = par[i,j])
       }
     }
   }

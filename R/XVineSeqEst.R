@@ -3,6 +3,7 @@
 #' @description
 #' `XVineSeqEst` estimates parameters associated with bivariate (tail) copula densities tree by tree sequentially from \eqn{T_1} to \eqn{T_{d-1}}.
 #' Information about the X-Vine specification is contained in the object from \code{XVineSpec()}.
+#' For more details on sequential parameter estimation, refer to Kiriliouk, A., Lee, J., & Segers, J. (2023).
 #' 
 #' @param data An \eqn{n\times d} data matrix from the inverted Pareto distribution. In this case, `Rank=T` is not recommended as the rank transformation
 #' does not properly work for the data already on uniform scale.
@@ -20,6 +21,7 @@
 #' and the log-likelihood value for each edge in each tree is stored in the matrix `logLik`.
 #' @export
 #'
+#' @references Kiriliouk, A., Lee, J., & Segers, J. (2023). X-Vine Models for Multivariate Extremes. arXiv preprint arXiv:2312.15205.
 #' @examples
 #' StrMtx <- matrix(c(1, 1, 2, 2, 4,
 #' 0, 2, 1, 3, 2,

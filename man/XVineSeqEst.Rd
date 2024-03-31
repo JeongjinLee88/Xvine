@@ -28,6 +28,7 @@ and the log-likelihood value for each edge in each tree is stored in the matrix 
 \description{
 \code{XVineSeqEst} estimates parameters associated with bivariate (tail) copula densities tree by tree sequentially from \eqn{T_1} to \eqn{T_{d-1}}.
 Information about the X-Vine specification is contained in the object from \code{XVineSpec()}.
+For more details on sequential parameter estimation, refer to Kiriliouk, A., Lee, J., & Segers, J. (2023).
 }
 \examples{
 StrMtx <- matrix(c(1, 1, 2, 2, 4,
@@ -51,4 +52,7 @@ XVS=XVineSpec(M = StrMtx, Mmod = FamMtx, Mpar = ParMtx)
 Dat_P=ParetoSim(n = 5000, XVS = XVS) # Pareto scale
 # Sequential parameter estimation
 SeqEstOut=XVineSeqEst(data = Dat_P, Rank = TRUE, qt = 0.05, XVS=XVS, method = 'mle')
+}
+\references{
+Kiriliouk, A., Lee, J., & Segers, J. (2023). X-Vine Models for Multivariate Extremes. arXiv preprint arXiv:2312.15205.
 }
