@@ -41,9 +41,18 @@ Dat_P=ParetoSim(n = 2000, XVS = XVS) # Pareto scale
 XVineSeqEst(data = Dat_P, Rank = T, qt = 0.05, XVS=XVS, method = 'mle')
 ```
 
-4.  Parametric family selection
+4.  Choosing bivariate parametric families along an X-vine sequence
 
-5.  Vine structure selection
+``` r
+# Specify the class of families
+familyset_tc=c(1:4)
+familyset_cop=c(0,1,3,4,5,6,13,14,16)
+# Sequential model selection of bivariate parametric families
+FamSelOut=XVineFamSel(data = Dat_P, Rank = TRUE, qt = 0.05, XVS = XVS
+                      , famset_tc=familyset_tc, famset_cop=familyset_cop)
+```
+
+5.  Selection of X-vine tree sequence
 
 ## References
 
