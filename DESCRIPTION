@@ -19,7 +19,10 @@ RoxygenNote: 7.2.3
 URL: https://github.com/JeongjinLee88/Xvine, https://jeongjinlee88.github.io/Xvine/
 BugReports: https://github.com/JeongjinLee88/Xvine/issues
 Imports: 
+    ggplot2,
+    reshape2,
     stats,
+    utils,
     VineCopula
 Suggests: 
     knitr,
