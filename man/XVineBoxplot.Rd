@@ -74,7 +74,8 @@ FamMtx <- matrix(c(0, 1, 2, 3, 4,
                    0, 0, 0, 0, 0),5,byrow = TRUE)
 # X-vine specification
 XVS=XVineSpec(M = StrMtx, Mmod = FamMtx, Mpar = ParMtx)
-BoxOut2K05=XVineBoxplot(N = 2000, qt = 0.05, ite = ite, XVS = XVS, RankT = TRUE)
+# To run, uncomment it.
+# XVineBoxplot(N = 500, qt = 0.05, ite = ite, XVS = XVS, RankT = TRUE)
 }
 \references{
 Kiriliouk, A., Lee, J., & Segers, J. (2023). X-Vine Models for Multivariate Extremes. arXiv preprint arXiv:2312.15205.
