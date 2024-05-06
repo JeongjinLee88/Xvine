@@ -72,7 +72,7 @@
 XVineFamSel <- function(data, Rank=TRUE, qt=0.2, XVS, famset_tc, famset_cop, selectioncrit="AIC", method = "mle", effsampsize=10, tau_threshold=0.05, weights = NA)
 {
   d <- ncol(data)
-  ##  Noe that the 'XVineFamSel' function uses multivariate 'inverted' Pareto samples
+  ##  Note that the 'XVineFamSel' function uses multivariate 'inverted' Pareto samples
   ##  If you directly use samples from the limiting distribution, they must be ones from Pareto distribution with Pareto margin.
   if(Rank){
     data <- ParetoTransRank(data = data, u_quan = qt, scaleType = "U") 

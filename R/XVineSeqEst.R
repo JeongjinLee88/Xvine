@@ -47,7 +47,7 @@
 XVineSeqEst <- function(data, Rank=TRUE, qt=0.2, XVS, method = "mle")
 {
   d <- ncol(data)
-  ##  Noe that the 'XVineSeqEst' function uses multivariate 'inverted' Pareto samples
+  ##  Note that the 'XVineSeqEst' function uses multivariate 'inverted' Pareto samples
   ##  If you directly use samples from the limiting distribution, they must be ones from Pareto distribution with Pareto margin.
   if(Rank){
     data <- ParetoTransRank(data = data, u_quan = qt, scaleType = "U") 
