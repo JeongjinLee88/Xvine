@@ -1,19 +1,10 @@
 ---
 title: "XvineWorkflow"
-output: 
-    bookdown::html_vignette2:
-      fig_width: 5
-      fig_height: 5
-      number_sections: true
-      toc: true
-pkgdown:
-  as_is: true
-bibliography: ../inst/references.bib
+output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{XvineWorkflow}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
-csl: ../inst/apa-no-ampersand.csl
 ---
 
 

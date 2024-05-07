@@ -2,8 +2,9 @@ pandoc: 3.1.1
 pkgdown: 2.0.7
 pkgdown_sha: ~
 articles:
+  XvineFlightDelays: XvineFlightDelays.html
   XvineWorkflow: XvineWorkflow.html
-last_built: 2024-05-07T19:50Z
+last_built: 2024-05-07T20:11Z
 urls:
   reference: https://jeongjinlee88.github.io/Xvine/reference
   article: https://jeongjinlee88.github.io/Xvine/articles
