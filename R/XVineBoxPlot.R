@@ -1,7 +1,7 @@
-#' Box-plots of parameter estimates in terms of dependence measures
+#' Box-plots of parameter estimates for X-vine models
 #'
 #' @description
-#' `XVineBoxplot` creates box-plots of parameter estimates for X-Vine models.
+#' `XVineBoxplot()` creates box-plots of parameter estimates for X-Vine models.
 #'  We implement the maximum likelihood method for estimating parameters.
 #'  The function provides ML estimates as well as dependence measure coefficients converted from the ML estimates.
 #'  Given the regular vine structure, the function considers estimating parameters by either selecting the family of bivariate (tail) copula via the AIC
@@ -25,7 +25,11 @@
 #' * 4=Dirichlet model
 #' @param familyset_cop Numeric vector; the class of bivariate copula families with a single parameter
 #' 
-#' @return A list of parameter estimates matrices for repeated simulations and boxplots of the parameter estimates where the first d-1 plots are for the first level tree \eqn{T_1} and the next d-2 plots are for \eqn{T_2} and so on.
+#' @return A list of parameter estimates matrices for repeated simulations and boxplots of the parameter estimates
+#'  where the first \eqn{d-1} plots are for the first level tree \eqn{T_1} and the next d-2 plots are for \eqn{T_2} and so on.
+#'  `bp_mle_SPE` is the boxplot of ML estimates whereas `bp_mle_Fam` plots the boxplot of ML estimates by selecting the family of bivariate parametric models.
+#'  Similarly, `bp_dep_SPE` gives the boxplot of dependence measures and `bp_dep_Fam` shows the boxplot of dependence measures by selecting the family of bivariate parametric models.
+#'  
 #' @export
 #' @references Kiriliouk, A., Lee, J., & Segers, J. (2023). X-Vine Models for Multivariate Extremes. arXiv preprint arXiv:2312.15205.
 #'  Czado, C. (2019). Analyzing dependent data with vine copulas. Lecture Notes in Statistics, Springer, 222.
@@ -170,5 +174,7 @@ XVineBoxplot <- function(N, qt, ite, XVS, RankT=TRUE, familyset_tc=c(1:4), famil
   bp_dep_Fam <- ggplot(data = data_longformat,aes(x=Var2,y=value,fill=Var1)) +
                 geom_boxplot() +
                 labs(title="",x="", y = "")
-  return(list("MLE_WithoutFamSel"=MLE_WithoutFamSel,"MLE_WithFamSel"=MLE_WithFamSel,"MLE2Dep_WithoutFamSel"=MLE2Dep_WithoutFamSel,"MLE2Dep_WithFamSel"=MLE2Dep_WithFamSel,'bp_mle_SPE'=bp_mle_SPE, 'bp_mle_Fam'=bp_mle_Fam, 'bp_dep_SPE'=bp_dep_SPE, 'bp_dep_Fam'=bp_dep_Fam))
+  return(list("MLE_WithoutFamSel"=MLE_WithoutFamSel,"MLE_WithFamSel"=MLE_WithFamSel
+              ,"MLE2Dep_WithoutFamSel"=MLE2Dep_WithoutFamSel,"MLE2Dep_WithFamSel"=MLE2Dep_WithFamSel
+              ,'bp_mle_SPE'=bp_mle_SPE, 'bp_mle_Fam'=bp_mle_Fam, 'bp_dep_SPE'=bp_dep_SPE, 'bp_dep_Fam'=bp_dep_Fam))
 }

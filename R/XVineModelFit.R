@@ -7,9 +7,12 @@
 #' 
 #' @param data A \eqn{n\times d} data matrix of multivariate Pareto samples.
 #' @param Rank Logical; whether rank transformation is performed or not (\code{Rank=T}; default).
-#' @param Rank_chiU Logical; whether the chi-plot of the upper tail dependence measure is plotted or not.
-#' @param Rank_chiL Logical; whether the chi-plot of the lower tail dependence measure is plotted or not.
-#' @param Rank_chi3 Logical; whether the rank transformation is applied for the chi-plot of the trivariate tail dependence measure.
+#' @param Rank_chiU Logical; whether rank-based samples are used or not for creating the chi-plot of the upper pairwise tail dependence measure.
+#' If \code{Rank_chiU=FALSE}, then `ChiUPlot` compares model-based chi's with fitted chi's via Monte Carlo simulation.
+#' @param Rank_chiL Logical; whether rank-based samples are used or not for creating the chi-plot of the lower pairwise tail dependence measure.
+#' If \code{Rank_chiL=FALSE}, then `ChiLPlot` compares model-based chi's with fitted chi's via Monte Carlo simulation.
+#' @param Rank_chi3 Logical; Logical; whether rank-based samples are used or not for creating the chi-plot of the trivariate tail dependence measure.
+#' If \code{Rank_chi3=FALSE}, then `ChiLPlot` compares model-based chi's with fitted chi's via Monte Carlo simulation.
 #' @param MST1_HR Logical; the minimum spanning tree for the Husler-Reiss model is plotted or not.
 #' @param qt Numeric; a lower threshold for the rank transformation. It switches from Pareto scale to uniform scale.
 #' @param N Numeric; sample size
@@ -30,7 +33,20 @@
 #' @param weights Logical; whether weights should be assigned to observations when missing values exist.
 #' @param cores Numeric; indicates the number of cores for parallel computing (optional).
 #'
-#' @return a nested list object with maximum spanning trees and fitted vine trees.
+#' @return A nested list object containing:
+#' * MST: Maximum spanning trees
+#' * VineTree: Fitted X-vine models
+#' * mBIC_g: the plot of mBIC values across tree levels
+#' * BIC_g: the plot of BIC values across tree levels
+#' * XVS_spec: the X-vine specification from fitted X-vine models
+#' * emp_chimat: the matrix of empirical pairwise chi's
+#' * XVine_chimat: the matrix of fitted pairwise chi's
+#' * ChiLPlot: the chi-plot of the lower pairwise tail dependence measure
+#' * ChiUPlot: the chi-plot of the upper pairwise tail dependence measure
+#' * Chi3Plot: the chi-plot of the trivariate tail dependence measure
+#' * TruncLevelStar: the optimal truncation level determined as the minimum between the tree level with the lowest mBIC value
+#'  and the tree level such that all pair-copulas are set to independence copula
+#' * TruncLevel_mBICmin: the truncation level with the lowest mBIC value
 #' @export
 #' 
 #' @examples
@@ -328,9 +344,11 @@ XVineModelFit <- function(data, Rank=TRUE, Rank_chiU=TRUE, Rank_chiL=FALSE, Rank
         plot.margin = margin(0.5, 0.5, 0.5, 0.5, "cm")) +
       scale_x_continuous(n.breaks = 5)
     Chi3Plot
+  }else{
+    Chi3Plot=NULL
   }
   
   
-  return(list("MST"=MST,"VineTree"=VineTree,"mBIC_g"=mBIC_g,"BIC_g"=BIC_g,"XVS_spec"=XVS_spec,"emp_chimat"=emp_chimat,"XVine_chimat"=XVine_chimat,"ChiLPlot"=ChiLPlot,"ChiUPlot"=ChiUPlot,"TruncLevelStar"=TruncLevelStar,"TruncLevel_mBICmin"=TruncLevel_mBICmin))
+  return(list("MST"=MST,"VineTree"=VineTree,"mBIC_g"=mBIC_g,"BIC_g"=BIC_g,"XVS_spec"=XVS_spec,"emp_chimat"=emp_chimat,"XVine_chimat"=XVine_chimat,"ChiLPlot"=ChiLPlot,"ChiUPlot"=ChiUPlot,"Chi3Plot"=Chi3Plot,"TruncLevelStar"=TruncLevelStar,"TruncLevel_mBICmin"=TruncLevel_mBICmin))
 }
 

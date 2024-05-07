@@ -2,7 +2,7 @@
 % Please edit documentation in R/XVineBoxPlot.R
 \name{XVineBoxplot}
 \alias{XVineBoxplot}
-\title{Box-plots of parameter estimates in terms of dependence measures}
+\title{Box-plots of parameter estimates for X-vine models}
 \usage{
 XVineBoxplot(
   N,
@@ -37,10 +37,13 @@ Possible tail copula models are:
 \item{familyset_cop}{Numeric vector; the class of bivariate copula families with a single parameter}
 }
 \value{
-A list of parameter estimates matrices for repeated simulations and boxplots of the parameter estimates where the first d-1 plots are for the first level tree \eqn{T_1} and the next d-2 plots are for \eqn{T_2} and so on.
+A list of parameter estimates matrices for repeated simulations and boxplots of the parameter estimates
+where the first \eqn{d-1} plots are for the first level tree \eqn{T_1} and the next d-2 plots are for \eqn{T_2} and so on.
+\code{bp_mle_SPE} is the boxplot of ML estimates whereas \code{bp_mle_Fam} plots the boxplot of ML estimates by selecting the family of bivariate parametric models.
+Similarly, \code{bp_dep_SPE} gives the boxplot of dependence measures and \code{bp_dep_Fam} shows the boxplot of dependence measures by selecting the family of bivariate parametric models.
 }
 \description{
-\code{XVineBoxplot} creates box-plots of parameter estimates for X-Vine models.
+\code{XVineBoxplot()} creates box-plots of parameter estimates for X-Vine models.
 We implement the maximum likelihood method for estimating parameters.
 The function provides ML estimates as well as dependence measure coefficients converted from the ML estimates.
 Given the regular vine structure, the function considers estimating parameters by either selecting the family of bivariate (tail) copula via the AIC

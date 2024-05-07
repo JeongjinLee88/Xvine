@@ -36,11 +36,14 @@ XVineModelFit(
 
 \item{Rank}{Logical; whether rank transformation is performed or not (\code{Rank=T}; default).}
 
-\item{Rank_chiU}{Logical; whether the chi-plot of the upper tail dependence measure is plotted or not.}
+\item{Rank_chiU}{Logical; whether rank-based samples are used or not for creating the chi-plot of the upper pairwise tail dependence measure.
+If \code{Rank_chiU=FALSE}, then \code{ChiUPlot} compares model-based chi's with fitted chi's via Monte Carlo simulation.}
 
-\item{Rank_chiL}{Logical; whether the chi-plot of the lower tail dependence measure is plotted or not.}
+\item{Rank_chiL}{Logical; whether rank-based samples are used or not for creating the chi-plot of the lower pairwise tail dependence measure.
+If \code{Rank_chiL=FALSE}, then \code{ChiLPlot} compares model-based chi's with fitted chi's via Monte Carlo simulation.}
 
-\item{Rank_chi3}{Logical; whether the rank transformation is applied for the chi-plot of the trivariate tail dependence measure.}
+\item{Rank_chi3}{Logical; Logical; whether rank-based samples are used or not for creating the chi-plot of the trivariate tail dependence measure.
+If \code{Rank_chi3=FALSE}, then \code{ChiLPlot} compares model-based chi's with fitted chi's via Monte Carlo simulation.}
 
 \item{MST1_HR}{Logical; the minimum spanning tree for the Husler-Reiss model is plotted or not.}
 
@@ -81,7 +84,22 @@ XVineModelFit(
 \item{cores}{Numeric; indicates the number of cores for parallel computing (optional).}
 }
 \value{
-a nested list object with maximum spanning trees and fitted vine trees.
+A nested list object containing:
+\itemize{
+\item MST: Maximum spanning trees
+\item VineTree: Fitted X-vine models
+\item mBIC_g: the plot of mBIC values across tree levels
+\item BIC_g: the plot of BIC values across tree levels
+\item XVS_spec: the X-vine specification from fitted X-vine models
+\item emp_chimat: the matrix of empirical pairwise chi's
+\item XVine_chimat: the matrix of fitted pairwise chi's
+\item ChiLPlot: the chi-plot of the lower pairwise tail dependence measure
+\item ChiUPlot: the chi-plot of the upper pairwise tail dependence measure
+\item Chi3Plot: the chi-plot of the trivariate tail dependence measure
+\item TruncLevelStar: the optimal truncation level determined as the minimum between the tree level with the lowest mBIC value
+and the tree level such that all pair-copulas are set to independence copula
+\item TruncLevel_mBICmin: the truncation level with the lowest mBIC value
+}
 }
 \description{
 Fits X-Vine models to a d-dimensional inverted-Pareto data set. The function selects vine tree structures, using maximum spanning tree.
