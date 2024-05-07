@@ -9,6 +9,7 @@
 #' @param x2 A numeric vector; indicates the second variable corresponding to the second node of the edge \eqn{e=\{a,b\}} in the first tree. 
 #' @param familyset Numeric vector; indicates the list of bivariate tail copula models.
 #' @param selectioncrit Character string; indicates the selection criterion for the family of bivariate tail copula models.
+#' @param si Numeric; a tuning parameter for mBIC (\eqn{\si_0=0.9}; default).
 #'
 #' @return A list object consisting of the class type, parameter estimates, log-likelihood value, AIC, pseudo-observations
 #'  for selected bivariate tail copula models.

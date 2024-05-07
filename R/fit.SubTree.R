@@ -17,11 +17,13 @@
 #' @param weights Logical; whether the weights are applied to missing values.
 #' @param se Logical; whether standard errors for ML estimators are reported.
 #' @param cores Numeric; indicates the number of cores for parallel computing (optional).
-#'
+#' @param si Numeric; a tuning parameter for mBIC (\eqn{\si_0=0.9}; default).
+#' @param effsampsize Numeric; the specified effective sample size for the independence copula (\eqn{n_{D_e}}<10; default).
+#' @param tau_threshold Numeric; the specified Kendall's tau value for the independence copula (\eqn{\hat{\tau}_e}<0.05; default).
+#' 
 #' @return A nested list of MST including the maximum spanning tree and fitted vine models.
 #' @export
 #'
-#' @examples
 fit.SubTree <- function(data, MST, VineTree, copfamset, tree, si, selectioncrit, progress, effsampsize, tau_threshold, weights = NA, se = FALSE, cores = 1) 
 {
   #VineTree[[tree]] <- MST[[tree]]
@@ -64,9 +66,12 @@ fit.SubTree <- function(data, MST, VineTree, copfamset, tree, si, selectioncrit,
     MST[[tree]]$E$Copula.CondName.1[i] <- n1a
     MST[[tree]]$E$Copula.CondName.2[i] <- n2a
   }
-  if (cores > 1) 
-    lapply <- function(...) parallel::parLapply(getDefaultCluster(), 
+
+  if (cores > 1){
+    cl <- makeCluster()
+    lapply <- function(...) parallel::parLapply(cl, 
                                                 ...)
+  } 
   pc.fits <- lapply(pc.data, copSelect, familyset = copfamset, tree=tree, si=si,
                     selectioncrit = selectioncrit, se = se, effsampsize=effsampsize, tau_threshold=tau_threshold)
   
@@ -84,12 +89,12 @@ fit.SubTree <- function(data, MST, VineTree, copfamset, tree, si, selectioncrit,
   
   ##  Redefine pseudo-observations
   if(tree==2){
-    Out <- repseudo.SecTree(tree = tree, MST = MST, data = data, VineTree = VineTree)
+    Out <- Condfit.SecondTree(tree = tree, MST = MST, data = data, VineTree = VineTree)
     MST[[tree]]$E$Copula.CondData.1 <- Out$CondData.1
     MST[[tree]]$E$Copula.CondData.2 <- Out$CondData.2
   }
   if(tree > 2){
-    Out <- pseudo.Subtree(tree = tree, MST = MST, data = data, VineTree = VineTree)
+    Out <- Condfit.SubTree(tree = tree, MST = MST, data = data, VineTree = VineTree)
     MST[[tree]]$E$Copula.CondData.1 <- Out$CondData.1
     MST[[tree]]$E$Copula.CondData.2 <- Out$CondData.2
   }

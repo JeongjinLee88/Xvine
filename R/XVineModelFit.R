@@ -5,23 +5,59 @@
 #' and select bivariate exponent measure classes and pair-copula classes and estimate parameters for the corresponding classes
 #' Users can specify the type of edge weights for the first tree and subsequent trees separately and the class of bivariate exponent measures and pair-copulas
 #' 
-#' @param data a \eqn{n\times d} data matrix of multivariate Pareto samples.
+#' @param data A \eqn{n\times d} data matrix of multivariate Pareto samples.
+#' @param Rank Logical; whether rank transformation is performed or not (\code{Rank=T}; default).
+#' @param Rank_chiU Logical; whether the chi-plot of the upper tail dependence measure is plotted or not.
+#' @param Rank_chiL Logical; whether the chi-plot of the lower tail dependence measure is plotted or not.
+#' @param Rank_chi3 Logical; whether the rank transformation is applied for the chi-plot of the trivariate tail dependence measure.
+#' @param MST1_HR Logical; the minimum spanning tree for the Husler-Reiss model is plotted or not.
+#' @param qt Numeric; a lower threshold for the rank transformation. It switches from Pareto scale to uniform scale.
+#' @param N Numeric; sample size
+#' @param XVS A list consisting of three components: reconstructed structure matrices, family matrices, parameter matrices, see:[XVineSpec()].
 #' @param tcfamset Numeric vector; the class of bivariate exponent measures.
 #' @param pcfamset Numeric vector; the class of bivariate pair-copula models.
 #' @param selectioncrit Character string; indicates the selection criteria for the class of bivariate exponent measures or pair-copulas.
+#' @param BIC_graph Logical; whether the BIC graph over the tree level is plotted or not.
+#' @param Chi3_graph Logical; whether the chi-plot of the trivariate tail dependence measure is plotted or not.
 #' @param trunclevel Numeric; indicates the specified truncation level.
 #' @param progress Logical; whether the progress of selecting vine tree structures is printed.
-#' @param treecritT1 a character string, indicating the tree criterion for the first tree.
-#' @param treecritT2 a character string, indicating the tree criterion for subsequent trees.
+#' @param treecritT1 A character string, indicating the tree criterion for the first tree.
+#' @param treecritT2 A character string, indicating the tree criterion for subsequent trees.
+#' @param si Numeric; a tuning parameter for mBIC (\eqn{\si_0=0.9}; default).
+#' @param effsampsize Numeric; the specified effective sample size for the independence copula (\eqn{n_{D_e}}<10; default).
+#' @param tau_threshold Numeric; the specified Kendall's tau value for the independence copula (\eqn{\hat{\tau}_e}<0.05; default)
+#' @param se Logical; whether standard errors for ML estimators are reported.
 #' @param weights Logical; whether weights should be assigned to observations when missing values exist.
 #' @param cores Numeric; indicates the number of cores for parallel computing (optional).
-#' @param Rank Logical; whether rank transformation is performed or not (\code{Rank=T}; default).
-#' @param qt Numeric; a lower threshold for the rank transformation. It switches from Pareto scale to uniform scale.
-
+#'
 #' @return a nested list object with maximum spanning trees and fitted vine trees.
 #' @export
-#'
+#' 
 #' @examples
+#' StrMtx <- matrix(c(1, 1, 2, 2, 4,
+#' 0, 2, 1, 3, 2,
+#' 0, 0, 3, 1, 3,
+#' 0, 0, 0, 4, 1,
+#' 0, 0, 0, 0, 5),5,byrow = TRUE)
+#' ParMtx <- matrix(c(0, 1.5, 2, 2.5, 2,
+#'                 0, 0, 2, 2.5, 0.7,
+#'                 0, 0, 0, 0.4, -0.3,
+#'                 0, 0, 0, 0, 0.1,
+#'                 0, 0, 0, 0, 0),5,byrow = TRUE)
+#' FamMtx <- matrix(c(0, 1, 2, 3, 4,
+#'                    0, 0, 3, 4, 1,
+#'                    0, 0, 0, 3, 1,
+#'                    0, 0, 0, 0, 1,
+#'                    0, 0, 0, 0, 0),5,byrow = TRUE)
+#' # X-vine specification
+#' XVS=XVineSpec(M = StrMtx, Mmod = FamMtx, Mpar = ParMtx)
+#' Dat_P=ParetoSim(n = 2000, XVS = XVS) # Pareto scale
+#' Out=XVineModelFit(data = 1/Dat_P, N = 2000, XVS = XVS, Rank = FALSE
+#' , Rank_chiU = FALSE, Rank_chiL = FALSE, Rank_chi3 = FALSE
+#' , Chi3_graph = FALSE, tcfamset = c(1:4), pcfamset = c(0,1,3,4,5,6,13,14,16)
+#' , selectioncrit = "AIC", trunclevel = FALSE, progress = TRUE
+#' , treecritT1 = "chi", treecritT2 = "tau", effsampsize = 10, tau_threshold = 0.05
+#' , weights = NA, cores=1)
 XVineModelFit <- function(data, Rank=TRUE, Rank_chiU=TRUE, Rank_chiL=FALSE, Rank_chi3=TRUE, MST1_HR=FALSE, qt=0.2, N=8000
                            , XVS, tcfamset = c(1,2,3,4), pcfamset = c(0,1,3,4,5,6,13,14,16), selectioncrit = "AIC"
                            , BIC_graph=TRUE, Chi3_graph=FALSE, trunclevel = FALSE, progress = TRUE
@@ -47,16 +83,15 @@ XVineModelFit <- function(data, Rank=TRUE, Rank_chiU=TRUE, Rank_chiL=FALSE, Rank
   if(MST1_HR){
     MST[[1]] <- MST_HR(Dat_Pareto = data,quan = qt)
   }else{
-    g <- VineCopula:::initializeFirstGraph(data, T1crit, weights)
-    MST[[1]] <- VineCopula:::findMaxTree(g, mode = "RVine")
+    g <- InitializeFirstGraph(data, T1crit, weights)
+    MST[[1]] <- findMST(g, mode = "RVine")
   }
   VineTree[[1]] <- fit.FirstTree(MST[[1]], data, tcfamset, si=si,
-                                 selectioncrit = selectioncrit, cores = 1)
+                                 selectioncrit = selectioncrit)
   if(d > 2){
     for (tree in 2:(d - 1)) { # tree=2,3,4
-      g <- VineCopula:::buildNextGraph(VineTree[[tree-1]], weights, treecrit = Ticrit, 
-                                       cores > 1, truncated = FALSE)
-      MST[[tree]] <- VineCopula:::findMaxTree(g, mode = "RVine", truncated = FALSE)
+      g <- BuildNextGraph(VineTree[[tree-1]], weights, treecrit = Ticrit, truncated = FALSE)
+      MST[[tree]] <- findMST(g, mode = "RVine", truncated = FALSE)
       VineTree[[tree]] <- fit.SubTree(data = data, MST = MST, VineTree = VineTree, copfamset = pcfamset, tree = tree, si=si,
                                           selectioncrit, progress, effsampsize = effsampsize, tau_threshold = tau_threshold, weights = weights, 
                                           se = se, cores = cores)
@@ -198,7 +233,7 @@ XVineModelFit <- function(data, Rank=TRUE, Rank_chiU=TRUE, Rank_chiL=FALSE, Rank
   if(Rank_chiL){
     emp_chimat <- ChiMatrixMC(data) # already rank-based samples
     emp_chimat <- emp_chimat[upper.tri(emp_chimat)]
-    XVine_chimat <- ChiMatrixMC(FittedDat_P,Quan = qt)
+    XVine_chimat <- ChiMatrixMC(FittedDat_P,quan = qt)
     XVine_chimat <- XVine_chimat[upper.tri(XVine_chimat)]
   }else{
     # Model-based chi
@@ -266,7 +301,7 @@ XVineModelFit <- function(data, Rank=TRUE, Rank_chiU=TRUE, Rank_chiL=FALSE, Rank
     if(Rank_chi3){
       emp_chi3mat <- EmpChiArray(data)
       emp_chi3mat <- emp_chi3mat[upper.tri(emp_chi3mat[,,1])]
-      XVine_chi3mat <- EmpChiArray(FittedDat_P,Quan = qt)
+      XVine_chi3mat <- EmpChiArray(FittedDat_P,quan = qt)
       XVine_chi3mat <- XVine_chi3mat[upper.tri(XVine_chi3mat[,,1])]
     }else{
       emp_chi3mat <- EmpChiArray(1/ParetoSim(n = N, XVS = XVS))

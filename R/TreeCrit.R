@@ -4,7 +4,7 @@
 #' `TreeCrit()` chooses the selection criterion for regular vine trees. Possible criterion for the first tree
 #' are the lower tail dependence measure called `chi` and the `variogram` for the Husler-Reiss distribution.
 #' Other criteria for subsequent trees are Kendall's tau, Spearsman rho, information critera such as AIC, BIC, and adjusted AIC. 
-#' This function is built upon the function [set_treecrit()] in `VineCopula` package.
+#' This function is built upon the function `VineCopula:::set_treecrit` in `VineCopula` package.
 #' Users can add additional tree criteria to the function.
 #' 
 #' 
@@ -59,7 +59,7 @@ TreeCrit <- function(treecrit, famset){
       }
       else {
         complete.freq <- mean(!is.na(u1 + u2))
-        tau <- abs(VineCopula:::fasttau(u1[complete.i], u2[complete.i], 
+        tau <- abs(fastTau(u1[complete.i], u2[complete.i], 
                            weights))
         tau * sqrt(complete.freq)
       }

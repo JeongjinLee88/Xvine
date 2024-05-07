@@ -11,14 +11,14 @@
 #' @param tcfamset Numeric vector; specifies the class of bivariate tail copula models that users consider.
 #' @param selectioncrit Character string, indicating the selection criteria for the class of bivariate tail copula models.
 #' @param weights Logical; whether weights should be assigned to observations when missing values exist.
-#' @param cores Numeric; the number of cores for parallel computing (optional).
+#' @param si Numeric; a tuning parameter for mBIC (\eqn{\si_0=0.9}; default).
 #'
 #' @return a nested list object:
 #' * the maximum spanning tree with a node set and edge set.
 #' * the fitted tail copula model with selected classes, parameter estimates, log-likelihood values, AIC, and pseudo-observations.
 #' @export
 #'
-fit.FirstTree <- function (MST, data.invPa, tcfamset, si, selectioncrit, weights = NA, cores = 1)
+fit.FirstTree <- function (MST, data.invPa, tcfamset, si, selectioncrit, weights = NA)
 {
   d <- nrow(MST$E$nums)
   pc.data <- lapply(1:d, function(i) NULL)
@@ -46,9 +46,7 @@ fit.FirstTree <- function (MST, data.invPa, tcfamset, si, selectioncrit, weights
                                     MST$V$names[a[2]], sep = " , ")
     }
   }
-  if (cores > 1) 
-    lapply <- function(...) parallel::parLapply(getDefaultCluster(), 
-                                                ...)
+ 
   pc.fits <- lapply(pc.data, tcSelect, familyset = tcfamset, si=si,
                     selectioncrit = selectioncrit)
   for (i in 1:d) {

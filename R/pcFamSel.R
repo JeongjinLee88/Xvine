@@ -11,6 +11,9 @@
 #' @param tree A numeric value indicating the tree level.
 #' @param selectioncrit Character string, indicating the selection criteria for bivariate pair copulas.
 #' @param se Logical; whether standard errors for ML estimators are reported.
+#' @param si Numeric; a tuning parameter for mBIC (\eqn{\si_0=0.9}; default).
+#' @param effsampsize Numeric; the specified effective sample size for the independence copula (\eqn{n_{D_e}}<10; default).
+#' @param tau_threshold Numeric; the specified Kendall's tau value for the independence copula (\eqn{\hat{\tau}_e}<0.05; default).
 #'
 #' @return A list object consisting of the class type, parameter estimates, log-likelihood value, AIC, and pseudo-observations for selected bivariate pair-copulas.
 #' @export
