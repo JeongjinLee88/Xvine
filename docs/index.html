@@ -101,9 +101,26 @@
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="reference/XVineSeqEst.html">XVineSeqEst</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">Dat_P</span>, Rank <span class="op">=</span> <span class="cn">T</span>, qt <span class="op">=</span> <span class="fl">0.05</span>, XVS<span class="op">=</span><span class="va">XVS</span>, method <span class="op">=</span> <span class="st">'mle'</span><span class="op">)</span></span></code></pre></div>
 <ol start="4" style="list-style-type: decimal">
-<li><p>Parametric family selection</p></li>
-<li><p>Vine structure selection</p></li>
+<li>Choosing bivariate parametric families along an X-vine sequence</li>
 </ol>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Specify the class of families</span></span>
+<span><span class="va">familyset_tc</span><span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">4</span><span class="op">)</span></span>
+<span><span class="va">familyset_cop</span><span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">1</span>,<span class="fl">3</span>,<span class="fl">4</span>,<span class="fl">5</span>,<span class="fl">6</span>,<span class="fl">13</span>,<span class="fl">14</span>,<span class="fl">16</span><span class="op">)</span></span>
+<span><span class="co"># Sequential model selection of bivariate parametric families</span></span>
+<span><span class="va">FamSelOut</span><span class="op">=</span><span class="fu"><a href="reference/XVineFamSel.html">XVineFamSel</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">Dat_P</span>, Rank <span class="op">=</span> <span class="cn">TRUE</span>, qt <span class="op">=</span> <span class="fl">0.05</span>, XVS <span class="op">=</span> <span class="va">XVS</span></span>
+<span>                      , famset_tc<span class="op">=</span><span class="va">familyset_tc</span>, famset_cop<span class="op">=</span><span class="va">familyset_cop</span><span class="op">)</span></span></code></pre></div>
+<ol start="5" style="list-style-type: decimal">
+<li>Fitting X-vine models</li>
+</ol>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># 1. Find maximum spanning trees 2. Perform family selection 3. Estimate parameters</span></span>
+<span><span class="va">XVineFitOut</span><span class="op">=</span><span class="fu"><a href="reference/XVineModelFit.html">XVineModelFit</a></span><span class="op">(</span>data <span class="op">=</span> <span class="fl">1</span><span class="op">/</span><span class="va">Dat_P</span>, N <span class="op">=</span> <span class="fl">2000</span>, XVS <span class="op">=</span> <span class="va">XVS</span>, Rank<span class="op">=</span><span class="cn">FALSE</span></span>
+<span>      , Rank_chiU<span class="op">=</span><span class="cn">FALSE</span>, Rank_chiL<span class="op">=</span><span class="cn">FALSE</span>, Rank_chi3<span class="op">=</span><span class="cn">FALSE</span>, Chi3_graph<span class="op">=</span><span class="cn">TRUE</span></span>
+<span>      , tcfamset<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">4</span><span class="op">)</span>, pcfamset<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">1</span>,<span class="fl">3</span>,<span class="fl">4</span>,<span class="fl">5</span>,<span class="fl">6</span>,<span class="fl">13</span>,<span class="fl">14</span>,<span class="fl">16</span><span class="op">)</span></span>
+<span>      , selectioncrit<span class="op">=</span><span class="st">"AIC"</span>, trunclevel<span class="op">=</span><span class="cn">FALSE</span>, progress<span class="op">=</span><span class="cn">TRUE</span></span>
+<span>      , treecritT1<span class="op">=</span><span class="st">"chi"</span>, treecritT2<span class="op">=</span><span class="st">"tau"</span>, effsampsize<span class="op">=</span><span class="fl">10</span></span>
+<span>      , tau_threshold<span class="op">=</span><span class="fl">0.05</span>, weights<span class="op">=</span><span class="cn">NA</span>, cores<span class="op">=</span><span class="fl">1</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>
