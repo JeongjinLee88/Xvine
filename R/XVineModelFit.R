@@ -231,16 +231,16 @@ XVineModelFit <- function(data, Rank=TRUE, Rank_chiU=TRUE, Rank_chiL=FALSE, Rank
   FittedDat_P=ParetoSim(n = N, XVS = XVS_spec) # Pareto scale (no need to relabel nodes b/c the ft 'XVineSim' rearrange them in ascending order)
   
   if(Rank_chiL){
-    emp_chimat <- ChiMatrixMC(data) # already rank-based samples
+    emp_chimat <- ChiMtxMC(data) # already rank-based samples
     emp_chimat <- emp_chimat[upper.tri(emp_chimat)]
-    XVine_chimat <- ChiMatrixMC(FittedDat_P,quan = qt)
+    XVine_chimat <- ChiMtxMC(FittedDat_P,quan = qt)
     XVine_chimat <- XVine_chimat[upper.tri(XVine_chimat)]
   }else{
     # Model-based chi
     Dat_P=ParetoSim(n = N, XVS = XVS)
-    emp_chimat <- ChiMatrixMC(1/Dat_P) # samples from multivariate Pareto dist
+    emp_chimat <- ChiMtxMC(1/Dat_P) # samples from multivariate Pareto dist
     emp_chimat <- emp_chimat[upper.tri(emp_chimat)]
-    XVine_chimat <- ChiMatrixMC(1/FittedDat_P)
+    XVine_chimat <- ChiMtxMC(1/FittedDat_P)
     XVine_chimat <- XVine_chimat[upper.tri(XVine_chimat)]
   }
   ChiLPlot <- ggplot() +

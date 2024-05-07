@@ -8,8 +8,8 @@
 #' @param Dat An \eqn{n\times d} data matrix from multivariate inverted-Pareto distribution.
 #' If the original data are used, then the data transformation is performed to obtain pseudo-observations for the inverted-Pareto distribution
 #'  See \code{ParetoTransRank()}.
-#' @param Quan A numeric quantile, set a lower enough quantile \eqn{u_{quan}\in(0,1)} to convert data into pseudo-observations for the inverted-Pareto distribution.
-#' Default is `Quan=NULL`.
+#' @param quan A numeric quantile, set a lower enough quantile \eqn{u_{quan}\in(0,1)} to convert data into pseudo-observations for the inverted-Pareto distribution.
+#' Default is `quan=NULL`.
 #' 
 #' @return A \eqn{d\times d} strict upper triangular matrix of empirical pairwise chi-matrix.
 #' @export
@@ -38,7 +38,7 @@
 #' Dat_P=ParetoSim(n = 2000, XVS = XVS) # Pareto scale
 #' # Pairwise chi-matrix
 #' ChiMtxMC(Dat_P)
-ChiMtxMC <- function(Dat, Quan=NULL)
+ChiMtxMC <- function(Dat, quan=NULL)
 {
   if (!is.matrix(Dat)) {
     stop("The data should be a matrix")
@@ -46,8 +46,8 @@ ChiMtxMC <- function(Dat, Quan=NULL)
   if (ncol(Dat) <= 1) {
     stop("The data should be a matrix with at least two columns.")
   }
-  if (!is.null(Quan)) {
-    Dat <- ParetoTransRank(data = Dat, u_quan = Quan, scaleType = "U")
+  if (!is.null(quan)) {
+    Dat <- ParetoTransRank(data = Dat, u_quan = quan, scaleType = "U")
     #data <- data2mpareto(data, p)
   }
   d <- ncol(Dat)

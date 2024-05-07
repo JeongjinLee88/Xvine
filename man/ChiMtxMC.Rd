@@ -4,15 +4,15 @@
 \alias{ChiMtxMC}
 \title{Pairwise tail dependence matrix via Monte Carlo simulations}
 \usage{
-ChiMtxMC(Dat, Quan = NULL)
+ChiMtxMC(Dat, quan = NULL)
 }
 \arguments{
 \item{Dat}{An \eqn{n\times d} data matrix from multivariate inverted-Pareto distribution.
 If the original data are used, then the data transformation is performed to obtain pseudo-observations for the inverted-Pareto distribution
 See \code{ParetoTransRank()}.}
 
-\item{Quan}{A numeric quantile, set a lower enough quantile \eqn{u_{quan}\in(0,1)} to convert data into pseudo-observations for the inverted-Pareto distribution.
-Default is \code{Quan=NULL}.}
+\item{quan}{A numeric quantile, set a lower enough quantile \eqn{u_{quan}\in(0,1)} to convert data into pseudo-observations for the inverted-Pareto distribution.
+Default is \code{quan=NULL}.}
 }
 \value{
 A \eqn{d\times d} strict upper triangular matrix of empirical pairwise chi-matrix.

@@ -34,7 +34,7 @@
 #' Engelke, S., & Hitz, A. S. (2020). Graphical models for extremes. Journal of the Royal Statistical Society Series B: Statistical Methodology, 82(4), 871-932.
 #' 
 #'
-#' @seealso \code{VineEdges()}
+#' @seealso \code{XVineEdges()}
 #' @examples
 #' ##  A 6 x 6 structure matrix
 #' M <- cbind(c(1,0,0,0,0,0), c(1,4,0,0,0,0), c(4,1,6,0,0,0),
@@ -68,7 +68,7 @@
 #' cbind(PermTrucXVine[[1]][,,5],PermTrucXVine[[2]][,,5]) #compare with cbind(M,Mmod): looks ok!
 XVineSpec <- function(M, Mmod, Mpar){
   d <- nrow(M)
-  vedges <- VineEdges(M,Mmod,Mpar)
+  vedges <- XVineEdges(M,Mmod,Mpar)
   
   kinit <- M[1,1]
   Dtotal <- c(1:d)[-kinit] 
@@ -106,7 +106,7 @@ XVineSpec <- function(M, Mmod, Mpar){
       }
     }
     
-    edgnew <- VineEdges(matr,d = d)$edges 
+    edgnew <- XVineEdges(matr,d = d)$edges 
     for(i in 1:length(edgnew)){
       ind <- apply(edgnew[[i]], 2, function(j) which(apply(vedges$edges[[i]], 2, function(x) all(x== j))))
       matrpar[i,(i+1):d] <- vedges$pars[[i]][ind]

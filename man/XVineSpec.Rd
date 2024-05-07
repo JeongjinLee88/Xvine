@@ -77,5 +77,5 @@ Kiriliouk, A., Lee, J., & Segers, J. (2023). X-Vine Models for Multivariate Extr
 Engelke, S., & Hitz, A. S. (2020). Graphical models for extremes. Journal of the Royal Statistical Society Series B: Statistical Methodology, 82(4), 871-932.
 }
 \seealso{
-\code{VineEdges()}
+\code{XVineEdges()}
 }
