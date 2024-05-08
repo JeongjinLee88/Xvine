@@ -4,25 +4,27 @@
 #' Fits X-Vine models to a d-dimensional inverted-Pareto data set. The function selects vine tree structures, using maximum spanning tree.
 #' and select bivariate exponent measure classes and pair-copula classes and estimate parameters for the corresponding classes
 #' Users can specify the type of edge weights for the first tree and subsequent trees separately and the class of bivariate exponent measures and pair-copulas
+#' Note that if you do not use samples from the limiting distribution, then the `Rank` transformation is required to create chi-plots or variogram-plots.
+#' That is, if you fit the X-vine model to the real dataset, then the rank transformation is required throughout.
 #' 
 #' @param data A \eqn{n\times d} data matrix of multivariate Pareto samples.
 #' @param Rank Logical; whether rank transformation is performed or not (\code{Rank=T}; default).
-#' @param Rank_chiU Logical; whether rank-based samples are used or not for creating the chi-plot of the upper pairwise tail dependence measure.
-#' If \code{Rank_chiU=FALSE}, then `ChiUPlot` compares model-based chi's with fitted chi's via Monte Carlo simulation.
 #' @param Rank_chiL Logical; whether rank-based samples are used or not for creating the chi-plot of the lower pairwise tail dependence measure.
 #' If \code{Rank_chiL=FALSE}, then `ChiLPlot` compares model-based chi's with fitted chi's via Monte Carlo simulation.
-#' @param Rank_chi3 Logical; Logical; whether rank-based samples are used or not for creating the chi-plot of the trivariate tail dependence measure.
+#' @param Rank_chi3 Logical; whether rank-based samples are used or not for creating the chi-plot of the trivariate tail dependence measure.
 #' If \code{Rank_chi3=FALSE}, then `ChiLPlot` compares model-based chi's with fitted chi's via Monte Carlo simulation.
+#' @param Chi3_graph Logical; whether the chi-plot of the trivariate tail dependence measure is plotted or not.
+#' @param Rank_Vario Logical; whether rank-based samples are used or not for the plot of the empirical pairwise variogram versus the fitted pairwise variogram. 
+#' @param Vario_graph Logical; whether the plot of the empirical pairwise variogram versus the fitted pairwise variogram is created or not.
 #' @param MST1_HR Logical; the minimum spanning tree for the Husler-Reiss model is plotted or not.
-#' @param qt Numeric; a lower threshold for the rank transformation. It switches from Pareto scale to uniform scale.
-#' @param N Numeric; sample size
+#' @param quan Numeric; a lower threshold for the rank transformation. It switches from Pareto scale to uniform scale.
+#' @param N Numeric; the sample size to draw samples from the limiting distribution of multivariate Pareto distribution.
 #' @param XVS A list consisting of three components: reconstructed structure matrices, family matrices, parameter matrices, see:[XVineSpec()].
 #' @param tcfamset Numeric vector; the class of bivariate exponent measures.
 #' @param pcfamset Numeric vector; the class of bivariate pair-copula models.
 #' @param selectioncrit Character string; indicates the selection criteria for the class of bivariate exponent measures or pair-copulas.
 #' @param BIC_graph Logical; whether the BIC graph over the tree level is plotted or not.
-#' @param Chi3_graph Logical; whether the chi-plot of the trivariate tail dependence measure is plotted or not.
-#' @param trunclevel Numeric; indicates the specified truncation level.
+#' @param trunclevel Numeric; indicates the specified truncation level (\code{trunclevel=NULL}; default).
 #' @param progress Logical; whether the progress of selecting vine tree structures is printed.
 #' @param treecritT1 A character string, indicating the tree criterion for the first tree.
 #' @param treecritT2 A character string, indicating the tree criterion for subsequent trees.
@@ -42,8 +44,8 @@
 #' * emp_chimat: the matrix of empirical pairwise chi's
 #' * XVine_chimat: the matrix of fitted pairwise chi's
 #' * ChiLPlot: the chi-plot of the lower pairwise tail dependence measure
-#' * ChiUPlot: the chi-plot of the upper pairwise tail dependence measure
 #' * Chi3Plot: the chi-plot of the trivariate tail dependence measure
+#' * VarioPlot: the plot of the pairwise empirical varigoram versus fitted variogram
 #' * TruncLevelStar: the optimal truncation level determined as the minimum between the tree level with the lowest mBIC value
 #'  and the tree level such that all pair-copulas are set to independence copula
 #' * TruncLevel_mBICmin: the truncation level with the lowest mBIC value
@@ -68,21 +70,24 @@
 #' # X-vine specification
 #' XVS=XVineSpec(M = StrMtx, Mmod = FamMtx, Mpar = ParMtx)
 #' Dat_P=ParetoSim(n = 2000, XVS = XVS) # Pareto scale
-#' Out=XVineModelFit(data = 1/Dat_P, N = 2000, XVS = XVS, Rank = FALSE
-#' , Rank_chiU = FALSE, Rank_chiL = FALSE, Rank_chi3 = FALSE
-#' , Chi3_graph = FALSE, tcfamset = c(1:4), pcfamset = c(0,1,3,4,5,6,13,14,16)
-#' , selectioncrit = "AIC", trunclevel = FALSE, progress = TRUE
-#' , treecritT1 = "chi", treecritT2 = "tau", effsampsize = 10, tau_threshold = 0.05
-#' , weights = NA, cores=1)
-XVineModelFit <- function(data, Rank=TRUE, Rank_chiU=TRUE, Rank_chiL=FALSE, Rank_chi3=TRUE, MST1_HR=FALSE, qt=0.2, N=8000
-                           , XVS, tcfamset = c(1,2,3,4), pcfamset = c(0,1,3,4,5,6,13,14,16), selectioncrit = "AIC"
-                           , BIC_graph=TRUE, Chi3_graph=FALSE, trunclevel = FALSE, progress = TRUE
-                           , treecritT1 = "chi", treecritT2= 'tau', si=0.9, effsampsize=10, tau_threshold=0.05, se=FALSE, weights=NA, cores = 1)
+#' XVineFitOut=XVineModelFit(data = 1/Dat_P, N = 2000, XVS = XVS
+#'                          , Rank = FALSE, Rank_chiL = FALSE, Rank_chi3 = FALSE
+#'                          , Chi3_graph = TRUE, Rank_Vario = FALSE, Vario_graph = FALSE
+#'                          , tcfamset = c(1:4), pcfamset = c(0,1,3,4,5,6,13,14,16)
+#'                          , selectioncrit = "AIC", trunclevel = FALSE, progress = TRUE
+#'                          , treecritT1 = "chi", treecritT2 = "tau"
+#'                          , effsampsize = 10, tau_threshold = 0.05
+#'                          , weights = NA, cores=1)
+XVineModelFit <- function(data, Rank=TRUE, Rank_chiL=FALSE, Rank_Vario=FALSE, Rank_chi3=TRUE
+                          , Chi3_graph=FALSE, Vario_graph=FALSE, MST1_HR=FALSE, quan=0.2, N=2000
+                          , XVS, tcfamset = c(1,2,3,4), pcfamset = c(0,1,3,4,5,6,13,14,16), selectioncrit = "AIC"
+                          , BIC_graph=TRUE, trunclevel = FALSE, progress = TRUE
+                          , treecritT1 = "chi", treecritT2= 'tau', si=0.9, effsampsize=10, tau_threshold=0.05, se=FALSE, weights=NA, cores = 1)
 {
   ##  Note that the 'XVineModelFit' function uses multivariate 'inverted' Pareto samples
   ##  If you directly use samples from the limiting distribution, they must be ones from Pareto distribution with Pareto margin.
   if(Rank){
-    data <- ParetoTransRank(data = data, u_quan = qt, scaleType = "U") 
+    data <- ParetoTransRank(data = data, u_quan = quan, scaleType = "U") 
   }
   # Determine the truncation level if specified.
   d <- ifelse(test = trunclevel,trunclevel+1,ncol(data))
@@ -97,7 +102,7 @@ XVineModelFit <- function(data, Rank=TRUE, Rank_chiU=TRUE, Rank_chiL=FALSE, Rank
   VineTree=list()
   # Fit the first MST (maximum spanning tree) and its extremal graph
   if(MST1_HR){
-    MST[[1]] <- MST_HR(Dat_Pareto = data,quan = qt)
+    MST[[1]] <- MST_HR(Dat_Pareto = data,quan = quan)
   }else{
     g <- InitializeFirstGraph(data, T1crit, weights)
     MST[[1]] <- findMST(g, mode = "RVine")
@@ -245,16 +250,22 @@ XVineModelFit <- function(data, Rank=TRUE, Rank_chiU=TRUE, Rank_chiL=FALSE, Rank
   #}
   
   FittedDat_P=ParetoSim(n = N, XVS = XVS_spec) # Pareto scale (no need to relabel nodes b/c the ft 'XVineSim' rearrange them in ascending order)
+  if(!is.null(XVS)){
+    Dat_Pa=ParetoSim(n = N, XVS = XVS)  
+  }else{
+    if(any(c(Rank_chiL,Rank_Vario,Rank_chi3)==FALSE))
+    stop("Either 'XVS' must be specified or all ('Rank_chiL','Rank_Vario','Rank_chi3') must be 'TRUE'")
+  }
   
   if(Rank_chiL){
+    # Empirical chi's vs Fitted chi's
     emp_chimat <- ChiMtxMC(data) # already rank-based samples
     emp_chimat <- emp_chimat[upper.tri(emp_chimat)]
-    XVine_chimat <- ChiMtxMC(FittedDat_P,quan = qt)
+    XVine_chimat <- ChiMtxMC(FittedDat_P,quan = quan)
     XVine_chimat <- XVine_chimat[upper.tri(XVine_chimat)]
   }else{
-    # Model-based chi
-    Dat_P=ParetoSim(n = N, XVS = XVS)
-    emp_chimat <- ChiMtxMC(1/Dat_P) # samples from multivariate Pareto dist
+    # Model-based chi's vs Fitted chi's via Monte Carlo simulation
+    emp_chimat <- ChiMtxMC(1/Dat_Pa) # limiting samples from the specified inverted-MPD
     emp_chimat <- emp_chimat[upper.tri(emp_chimat)]
     XVine_chimat <- ChiMtxMC(1/FittedDat_P)
     XVine_chimat <- XVine_chimat[upper.tri(XVine_chimat)]
@@ -280,47 +291,49 @@ XVineModelFit <- function(data, Rank=TRUE, Rank_chiU=TRUE, Rank_chiL=FALSE, Rank
   
   ChiLPlot
   
-  if(Rank_chiU){
-    emp_chimat <- emp_chi(data,p = 1-qt)
-    emp_chimat <- emp_chimat[upper.tri(emp_chimat)]
-    XVine_chimat <- emp_chi(FittedDat_P,p = 1-qt)
-    XVine_chimat <- XVine_chimat[upper.tri(XVine_chimat)]
+  if(Vario_graph){ # use samples on Pareto scale
+    if(Rank_Vario){
+      emp_Variomat <- emp_vario(data = data,p = 1-quan)
+      emp_Variomat <- emp_Variomat[upper.tri(emp_Variomat)]
+      XVine_Variomat <- emp_vario(FittedDat_P,p = 1-quan)
+      XVine_Variomat <- XVine_Variomat[upper.tri(XVine_Variomat)]
+    }else{
+      emp_Variomat <- emp_vario(Dat_Pa)
+      emp_Variomat <- emp_Variomat[upper.tri(emp_Variomat)]
+      XVine_Variomat <- emp_chi(FittedDat_P)
+      XVine_Variomat <- XVine_Variomat[upper.tri(XVine_Variomat)]
+    }
+    VarioPlot <- ggplot() +
+      geom_point(aes(x = c(emp_Variomat),y = c(XVine_Variomat))) +
+      geom_abline(slope = 1, intercept = 0) +
+      labs(title="",x=expression(paste("Empirical"," ",Gamma)), y = expression(paste("Fitted"," ",Gamma))) +
+      theme(
+        axis.text.x = element_text(color = "black",face="bold", size=14),
+        axis.text.y = element_text(face="bold", size =14),
+        axis.title.x = element_text(color="black", size=14, face="bold"),
+        axis.title.y = element_text(color="black", size=14, face="bold"),
+        panel.background = element_rect(fill = "white",
+                                        colour = "white",
+                                        linewidth = 0.5, linetype = "solid"),
+        panel.grid.major = element_line(linewidth = 0.5, linetype = 'solid',
+                                        colour = "grey"), 
+        panel.grid.minor = element_line(linewidth = 0.25, linetype = 'solid',
+                                        colour = "grey"),
+        plot.margin = margin(0.5, 0.5, 0.5, 0.5, "cm")) +
+        scale_x_continuous(n.breaks = 5)
+    VarioPlot
   }else{
-    emp_chimat <- emp_chi(ParetoSim(n = N, XVS = XVS))
-    emp_chimat <- emp_chimat[upper.tri(emp_chimat)]
-    XVine_chimat <- emp_chi(FittedDat_P)
-    XVine_chimat <- XVine_chimat[upper.tri(XVine_chimat)]
+    VarioPlot=NULL
   }
-  #chiXVine <- Gamma2chi(emp_vario(data = FittedDat_P)) # unless it is a pure HR case, not use
-  ChiUPlot <- ggplot() +
-    geom_point(aes(x = c(emp_chimat),y = c(XVine_chimat))) +
-    geom_abline(slope = 1, intercept = 0) +
-    labs(title="",x=expression(paste("Model"," ",chi)), y = expression(paste("Fitted"," ",chi))) +
-    theme(
-      axis.text.x = element_text(color = "black",face="bold", size=14),
-      axis.text.y = element_text(face="bold", size =14),
-      axis.title.x = element_text(color="black", size=14, face="bold"),
-      axis.title.y = element_text(color="black", size=14, face="bold"),
-      panel.background = element_rect(fill = "white",
-                                      colour = "white",
-                                      linewidth = 0.5, linetype = "solid"),
-      panel.grid.major = element_line(linewidth = 0.5, linetype = 'solid',
-                                      colour = "grey"), 
-      panel.grid.minor = element_line(linewidth = 0.25, linetype = 'solid',
-                                      colour = "grey"),
-      plot.margin = margin(0.5, 0.5, 0.5, 0.5, "cm")) +
-    scale_x_continuous(n.breaks = 5)
-  
-  ChiUPlot
   
   if(Chi3_graph){
     if(Rank_chi3){
       emp_chi3mat <- EmpChiArray(data)
       emp_chi3mat <- emp_chi3mat[upper.tri(emp_chi3mat[,,1])]
-      XVine_chi3mat <- EmpChiArray(FittedDat_P,quan = qt)
+      XVine_chi3mat <- EmpChiArray(FittedDat_P,quan = quan)
       XVine_chi3mat <- XVine_chi3mat[upper.tri(XVine_chi3mat[,,1])]
     }else{
-      emp_chi3mat <- EmpChiArray(1/ParetoSim(n = N, XVS = XVS))
+      emp_chi3mat <- EmpChiArray(1/Dat_Pa)
       emp_chi3mat <- emp_chi3mat[upper.tri(emp_chi3mat[,,1])]
       XVine_chi3mat <- EmpChiArray(1/FittedDat_P)
       XVine_chi3mat <- XVine_chi3mat[upper.tri(XVine_chi3mat[,,1])]
@@ -342,13 +355,17 @@ XVineModelFit <- function(data, Rank=TRUE, Rank_chiU=TRUE, Rank_chiL=FALSE, Rank
         panel.grid.minor = element_line(linewidth = 0.25, linetype = 'solid',
                                         colour = "grey"),
         plot.margin = margin(0.5, 0.5, 0.5, 0.5, "cm")) +
-      scale_x_continuous(n.breaks = 5)
+        scale_x_continuous(n.breaks = 5)
     Chi3Plot
   }else{
     Chi3Plot=NULL
   }
   
   
-  return(list("MST"=MST,"VineTree"=VineTree,"mBIC_g"=mBIC_g,"BIC_g"=BIC_g,"XVS_spec"=XVS_spec,"emp_chimat"=emp_chimat,"XVine_chimat"=XVine_chimat,"ChiLPlot"=ChiLPlot,"ChiUPlot"=ChiUPlot,"Chi3Plot"=Chi3Plot,"TruncLevelStar"=TruncLevelStar,"TruncLevel_mBICmin"=TruncLevel_mBICmin))
+  return(list("MST"=MST,"VineTree"=VineTree,"mBIC_g"=mBIC_g,"BIC_g"=BIC_g
+              ,"XVS_spec"=XVS_spec,"emp_chimat"=emp_chimat,"XVine_chimat"=XVine_chimat
+              ,"ChiLPlot"=ChiLPlot,"Chi3Plot"=Chi3Plot
+              ,"VarioPlot"=VarioPlot,"TruncLevelStar"=TruncLevelStar
+              ,"TruncLevel_mBICmin"=TruncLevel_mBICmin))
 }
 

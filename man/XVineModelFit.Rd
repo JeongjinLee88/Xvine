@@ -7,18 +7,19 @@
 XVineModelFit(
   data,
   Rank = TRUE,
-  Rank_chiU = TRUE,
   Rank_chiL = FALSE,
+  Rank_Vario = FALSE,
   Rank_chi3 = TRUE,
+  Chi3_graph = FALSE,
+  Vario_graph = FALSE,
   MST1_HR = FALSE,
-  qt = 0.2,
-  N = 8000,
+  quan = 0.2,
+  N = 2000,
   XVS,
   tcfamset = c(1, 2, 3, 4),
   pcfamset = c(0, 1, 3, 4, 5, 6, 13, 14, 16),
   selectioncrit = "AIC",
   BIC_graph = TRUE,
-  Chi3_graph = FALSE,
   trunclevel = FALSE,
   progress = TRUE,
   treecritT1 = "chi",
@@ -36,20 +37,23 @@ XVineModelFit(
 
 \item{Rank}{Logical; whether rank transformation is performed or not (\code{Rank=T}; default).}
 
-\item{Rank_chiU}{Logical; whether rank-based samples are used or not for creating the chi-plot of the upper pairwise tail dependence measure.
-If \code{Rank_chiU=FALSE}, then \code{ChiUPlot} compares model-based chi's with fitted chi's via Monte Carlo simulation.}
-
 \item{Rank_chiL}{Logical; whether rank-based samples are used or not for creating the chi-plot of the lower pairwise tail dependence measure.
 If \code{Rank_chiL=FALSE}, then \code{ChiLPlot} compares model-based chi's with fitted chi's via Monte Carlo simulation.}
 
-\item{Rank_chi3}{Logical; Logical; whether rank-based samples are used or not for creating the chi-plot of the trivariate tail dependence measure.
+\item{Rank_Vario}{Logical; whether rank-based samples are used or not for the plot of the empirical pairwise variogram versus the fitted pairwise variogram.}
+
+\item{Rank_chi3}{Logical; whether rank-based samples are used or not for creating the chi-plot of the trivariate tail dependence measure.
 If \code{Rank_chi3=FALSE}, then \code{ChiLPlot} compares model-based chi's with fitted chi's via Monte Carlo simulation.}
+
+\item{Chi3_graph}{Logical; whether the chi-plot of the trivariate tail dependence measure is plotted or not.}
+
+\item{Vario_graph}{Logical; whether the plot of the empirical pairwise variogram versus the fitted pairwise variogram is created or not.}
 
 \item{MST1_HR}{Logical; the minimum spanning tree for the Husler-Reiss model is plotted or not.}
 
-\item{qt}{Numeric; a lower threshold for the rank transformation. It switches from Pareto scale to uniform scale.}
+\item{quan}{Numeric; a lower threshold for the rank transformation. It switches from Pareto scale to uniform scale.}
 
-\item{N}{Numeric; sample size}
+\item{N}{Numeric; the sample size to draw samples from the limiting distribution of multivariate Pareto distribution.}
 
 \item{XVS}{A list consisting of three components: reconstructed structure matrices, family matrices, parameter matrices, see:\code{\link[=XVineSpec]{XVineSpec()}}.}
 
@@ -61,9 +65,7 @@ If \code{Rank_chi3=FALSE}, then \code{ChiLPlot} compares model-based chi's with 
 
 \item{BIC_graph}{Logical; whether the BIC graph over the tree level is plotted or not.}
 
-\item{Chi3_graph}{Logical; whether the chi-plot of the trivariate tail dependence measure is plotted or not.}
-
-\item{trunclevel}{Numeric; indicates the specified truncation level.}
+\item{trunclevel}{Numeric; indicates the specified truncation level (\code{trunclevel=NULL}; default).}
 
 \item{progress}{Logical; whether the progress of selecting vine tree structures is printed.}
 
@@ -94,8 +96,8 @@ A nested list object containing:
 \item emp_chimat: the matrix of empirical pairwise chi's
 \item XVine_chimat: the matrix of fitted pairwise chi's
 \item ChiLPlot: the chi-plot of the lower pairwise tail dependence measure
-\item ChiUPlot: the chi-plot of the upper pairwise tail dependence measure
 \item Chi3Plot: the chi-plot of the trivariate tail dependence measure
+\item VarioPlot: the plot of the pairwise empirical varigoram versus fitted variogram
 \item TruncLevelStar: the optimal truncation level determined as the minimum between the tree level with the lowest mBIC value
 and the tree level such that all pair-copulas are set to independence copula
 \item TruncLevel_mBICmin: the truncation level with the lowest mBIC value
@@ -105,6 +107,8 @@ and the tree level such that all pair-copulas are set to independence copula
 Fits X-Vine models to a d-dimensional inverted-Pareto data set. The function selects vine tree structures, using maximum spanning tree.
 and select bivariate exponent measure classes and pair-copula classes and estimate parameters for the corresponding classes
 Users can specify the type of edge weights for the first tree and subsequent trees separately and the class of bivariate exponent measures and pair-copulas
+Note that if you do not use samples from the limiting distribution, then the \code{Rank} transformation is required to create chi-plots or variogram-plots.
+That is, if you fit the X-vine model to the real dataset, then the rank transformation is required throughout.
 }
 \examples{
 StrMtx <- matrix(c(1, 1, 2, 2, 4,
@@ -125,10 +129,12 @@ FamMtx <- matrix(c(0, 1, 2, 3, 4,
 # X-vine specification
 XVS=XVineSpec(M = StrMtx, Mmod = FamMtx, Mpar = ParMtx)
 Dat_P=ParetoSim(n = 2000, XVS = XVS) # Pareto scale
-Out=XVineModelFit(data = 1/Dat_P, N = 2000, XVS = XVS, Rank = FALSE
-, Rank_chiU = FALSE, Rank_chiL = FALSE, Rank_chi3 = FALSE
-, Chi3_graph = FALSE, tcfamset = c(1:4), pcfamset = c(0,1,3,4,5,6,13,14,16)
-, selectioncrit = "AIC", trunclevel = FALSE, progress = TRUE
-, treecritT1 = "chi", treecritT2 = "tau", effsampsize = 10, tau_threshold = 0.05
-, weights = NA, cores=1)
+XVineFitOut=XVineModelFit(data = 1/Dat_P, N = 2000, XVS = XVS
+                         , Rank = FALSE, Rank_chiL = FALSE, Rank_chi3 = FALSE
+                         , Chi3_graph = TRUE, Rank_Vario = FALSE, Vario_graph = FALSE
+                         , tcfamset = c(1:4), pcfamset = c(0,1,3,4,5,6,13,14,16)
+                         , selectioncrit = "AIC", trunclevel = FALSE, progress = TRUE
+                         , treecritT1 = "chi", treecritT2 = "tau"
+                         , effsampsize = 10, tau_threshold = 0.05
+                         , weights = NA, cores=1)
 }
