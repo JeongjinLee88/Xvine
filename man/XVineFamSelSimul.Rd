@@ -81,6 +81,6 @@ FamMtx <- matrix(c(0, 1, 2, 3, 4,
                    0, 0, 0, 0, 0),5,byrow = TRUE)
 # X-vine specification
 XVS=XVineSpec(M = StrMtx, Mmod = FamMtx, Mpar = ParMtx)
-XVineFamSelSimul(N = 1000, qt = 0.05, ite = 200, XVS = XVS
+XVineFamSelSimul(N = 1000, qt = 0.05, ite = 100, XVS = XVS
 ,edgeIndex = c(4,5), familyset_tc=c(1:4), familyset_cop = c(0,1,3,4,5,6,13,14,16))
 }

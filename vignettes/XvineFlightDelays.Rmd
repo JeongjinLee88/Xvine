@@ -7,6 +7,9 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
+
+
+
 ```{r, include = FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE,
@@ -14,6 +17,94 @@ knitr::opts_chunk$set(
 )
 ```
 
+####    1. Load packages
+
 ```{r setup}
 library(Xvine)
+library(graphicalExtremes)
+library(VineCopula)
 ```
+
+####    2. Load flight delays data
+
+The flight delays dataset consists of the sample size of $n=3603$ and $d=29$ variables.
+
+```{r, include=FALSE}
+FlightTrain <- drop(graphicalExtremes::getFlightDelayData('delays', 'tcCluster', 'tcTrain'))
+FlightTest <- drop(graphicalExtremes::getFlightDelayData('delays', 'tcCluster', 'tcTest'))
+FlightDelay=rbind(FlightTrain,FlightTest)
+```
+
+
+####    3. Fit the X-vine model to the whole data set.
+
+
+```{r, eval=FALSE}
+XVineFlightOut=XVineModelFit(data = FlightDelay, N = 3600, XVS = NULL
+              , Rank = TRUE, Rank_chiL = TRUE, Rank_chi3 = TRUE
+              , Chi3_graph = TRUE, Rank_Vario = FALSE, Vario_graph = FALSE
+              , quan=0.13, tcfamset = c(1:4), pcfamset = c(0,1,3,4,5,6,13,14,16)
+              , selectioncrit = "AIC", trunclevel = FALSE, progress = TRUE
+              , treecritT1 = "chi", treecritT2 = "tau", effsampsize = 10
+              , tau_threshold = 0.05, weights = NA, cores=1)
+XVineFlightOut$ChiLPlot
+XVineFlightOut$mBIC_g
+```
+
+
+####    4. Fit the X-vine model truncated at the mBIC-optimal truncation level
+
+
+```{r, include=FALSE}
+XVineFlightTruncOut=XVineModelFit(data = FlightDelay, N = 3600, XVS = NULL
+              , Rank = TRUE, Rank_chiL = TRUE, Rank_chi3 = TRUE
+              , Chi3_graph = TRUE, Rank_Vario = TRUE, Vario_graph = FALSE
+              , quan=0.13, tcfamset = c(1:4), pcfamset = c(0,1,3,4,5,6,13,14,16)
+              , selectioncrit = "AIC", trunclevel = 7, progress = TRUE
+              , treecritT1 = "chi", treecritT2 = "tau", effsampsize = 10
+              , tau_threshold = 0.05, weights = NA, cores=1)
+XVineFlightTruncOut$ChiLPlot
+```
+
+
+####    5. Fit the Husler-Reiss X-vine model at the mBIC-optimal truncation level
+
+
+```{r, include=FALSE}
+HRXVineFlightOut=XVineModelFit(data = FlightDelay, N = 3600, XVS = NULL
+                , Rank = TRUE, Rank_chiL = TRUE, Rank_chi3 = TRUE
+                , Chi3_graph = TRUE, Rank_Vario = TRUE, Vario_graph = TRUE
+                , MST1_HR=TRUE, quan=0.13, tcfamset = c(1), pcfamset = c(0,1)
+                , selectioncrit = "AIC", trunclevel = 7, progress = TRUE
+                , treecritT1 = "chi", treecritT2 = "tau", effsampsize = 10
+                , tau_threshold = 0.05, weights = NA, cores=1)
+HRXVineFlightOut$ChiLPlot
+HRXVineFlightOut$VarioPlot
+```
+
+
+####    6. Sensitive analysis for the mBIC-optimal truncation level across low quantiles.
+
+
+```{r, eval=FALSE}
+mBICplot(FlightDelay, Rank=TRUE, quan=seq(0.05,0.15,by=0.1)
+         , famset_tc=c(1:4), famset_pc=c(0,1,3,4,5,6,13,14,16)
+         , selectioncrit="AIC",trunclevel=FALSE
+         , treecritT1="chi",treecritT2="tau"
+         , effsampsize=10, tau_threshold=0.05, si=0.9)
+```
+
+
+####    7. Superimposed figure for the truncated X-vine model
+
+```{r, eval=FALSE}
+FlightGraphSuperImposed=XVineFlightGraph(XVineOut = XVineOut_Flight, TreeDimension = 7, IATAS = dimnames(FlightDelay)[[2]], Color4Edges = NULL)$ggp
+```
+
+
+####    8. Figures for an individual tree level by level for the X-vine model
+
+```{r, eval=FALSE}
+FlightGraphPerTree=XVineFlightGraphPerTree(XVineOut = XVineOut_Flight, IATAS=dimnames(FlightDelay)[[2]], TreeLevel = 2, Color4Edge = NULL)$ggp
+```
+
