@@ -78,9 +78,69 @@
 
     
     
+<div class="section level4">
+<h4 id="load-packages">1. Load packages<a class="anchor" aria-label="anchor" href="#load-packages"></a>
+</h4>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/JeongjinLee88/Xvine" class="external-link">Xvine</a></span><span class="op">)</span></span></code></pre></div>
-  </main>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/JeongjinLee88/Xvine" class="external-link">Xvine</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/sebastian-engelke/graphicalExtremes" class="external-link">graphicalExtremes</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/tnagler/VineCopula" class="external-link">VineCopula</a></span><span class="op">)</span></span></code></pre></div>
+</div>
+<div class="section level4">
+<h4 id="load-flight-delays-data">2. Load flight delays data<a class="anchor" aria-label="anchor" href="#load-flight-delays-data"></a>
+</h4>
+<p>The flight delays dataset consists of the sample size of <span class="math inline">\(n=3603\)</span> and <span class="math inline">\(d=29\)</span> variables.</p>
+</div>
+<div class="section level4">
+<h4 id="fit-the-x-vine-model-to-the-whole-data-set-">3. Fit the X-vine model to the whole data set.<a class="anchor" aria-label="anchor" href="#fit-the-x-vine-model-to-the-whole-data-set-"></a>
+</h4>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">XVineFlightOut</span><span class="op">=</span><span class="fu"><a href="../reference/XVineModelFit.html">XVineModelFit</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">FlightDelay</span>, N <span class="op">=</span> <span class="fl">3600</span>, XVS <span class="op">=</span> <span class="cn">NULL</span></span>
+<span>              , Rank <span class="op">=</span> <span class="cn">TRUE</span>, Rank_chiL <span class="op">=</span> <span class="cn">TRUE</span>, Rank_chi3 <span class="op">=</span> <span class="cn">TRUE</span></span>
+<span>              , Chi3_graph <span class="op">=</span> <span class="cn">TRUE</span>, Rank_Vario <span class="op">=</span> <span class="cn">FALSE</span>, Vario_graph <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span>              , quan<span class="op">=</span><span class="fl">0.13</span>, tcfamset <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">4</span><span class="op">)</span>, pcfamset <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">1</span>,<span class="fl">3</span>,<span class="fl">4</span>,<span class="fl">5</span>,<span class="fl">6</span>,<span class="fl">13</span>,<span class="fl">14</span>,<span class="fl">16</span><span class="op">)</span></span>
+<span>              , selectioncrit <span class="op">=</span> <span class="st">"AIC"</span>, trunclevel <span class="op">=</span> <span class="cn">FALSE</span>, progress <span class="op">=</span> <span class="cn">TRUE</span></span>
+<span>              , treecritT1 <span class="op">=</span> <span class="st">"chi"</span>, treecritT2 <span class="op">=</span> <span class="st">"tau"</span>, effsampsize <span class="op">=</span> <span class="fl">10</span></span>
+<span>              , tau_threshold <span class="op">=</span> <span class="fl">0.05</span>, weights <span class="op">=</span> <span class="cn">NA</span>, cores<span class="op">=</span><span class="fl">1</span><span class="op">)</span></span>
+<span><span class="va">XVineFlightOut</span><span class="op">$</span><span class="va">ChiLPlot</span></span>
+<span><span class="va">XVineFlightOut</span><span class="op">$</span><span class="va">mBIC_g</span></span></code></pre></div>
+</div>
+<div class="section level4">
+<h4 id="fit-the-x-vine-model-truncated-at-the-mbic-optimal-truncation-level">4. Fit the X-vine model truncated at the mBIC-optimal truncation
+level<a class="anchor" aria-label="anchor" href="#fit-the-x-vine-model-truncated-at-the-mbic-optimal-truncation-level"></a>
+</h4>
+</div>
+<div class="section level4">
+<h4 id="fit-the-husler-reiss-x-vine-model-at-the-mbic-optimal-truncation-level">5. Fit the Husler-Reiss X-vine model at the mBIC-optimal truncation
+level<a class="anchor" aria-label="anchor" href="#fit-the-husler-reiss-x-vine-model-at-the-mbic-optimal-truncation-level"></a>
+</h4>
+</div>
+<div class="section level4">
+<h4 id="sensitive-analysis-for-the-mbic-optimal-truncation-level-across-low-quantiles-">6. Sensitive analysis for the mBIC-optimal truncation level across
+low quantiles.<a class="anchor" aria-label="anchor" href="#sensitive-analysis-for-the-mbic-optimal-truncation-level-across-low-quantiles-"></a>
+</h4>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/mBICplot.html">mBICplot</a></span><span class="op">(</span><span class="va">FlightDelay</span>, Rank<span class="op">=</span><span class="cn">TRUE</span>, quan<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">0.05</span>,<span class="fl">0.15</span>,by<span class="op">=</span><span class="fl">0.1</span><span class="op">)</span></span>
+<span>         , famset_tc<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">4</span><span class="op">)</span>, famset_pc<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">1</span>,<span class="fl">3</span>,<span class="fl">4</span>,<span class="fl">5</span>,<span class="fl">6</span>,<span class="fl">13</span>,<span class="fl">14</span>,<span class="fl">16</span><span class="op">)</span></span>
+<span>         , selectioncrit<span class="op">=</span><span class="st">"AIC"</span>,trunclevel<span class="op">=</span><span class="cn">FALSE</span></span>
+<span>         , treecritT1<span class="op">=</span><span class="st">"chi"</span>,treecritT2<span class="op">=</span><span class="st">"tau"</span></span>
+<span>         , effsampsize<span class="op">=</span><span class="fl">10</span>, tau_threshold<span class="op">=</span><span class="fl">0.05</span>, si<span class="op">=</span><span class="fl">0.9</span><span class="op">)</span></span></code></pre></div>
+</div>
+<div class="section level4">
+<h4 id="superimposed-figure-for-the-truncated-x-vine-model">7. Superimposed figure for the truncated X-vine model<a class="anchor" aria-label="anchor" href="#superimposed-figure-for-the-truncated-x-vine-model"></a>
+</h4>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">FlightGraphSuperImposed</span><span class="op">=</span><span class="fu">XVineFlightGraph</span><span class="op">(</span>XVineOut <span class="op">=</span> <span class="va">XVineOut_Flight</span>, TreeDimension <span class="op">=</span> <span class="fl">7</span>, IATAS <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/dimnames.html" class="external-link">dimnames</a></span><span class="op">(</span><span class="va">FlightDelay</span><span class="op">)</span><span class="op">[[</span><span class="fl">2</span><span class="op">]</span><span class="op">]</span>, Color4Edges <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span><span class="op">$</span><span class="va">ggp</span></span></code></pre></div>
+</div>
+<div class="section level4">
+<h4 id="figures-for-an-individual-tree-level-by-level-for-the-x-vine-model">8. Figures for an individual tree level by level for the X-vine
+model<a class="anchor" aria-label="anchor" href="#figures-for-an-individual-tree-level-by-level-for-the-x-vine-model"></a>
+</h4>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">FlightGraphPerTree</span><span class="op">=</span><span class="fu">XVineFlightGraphPerTree</span><span class="op">(</span>XVineOut <span class="op">=</span> <span class="va">XVineOut_Flight</span>, IATAS<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/dimnames.html" class="external-link">dimnames</a></span><span class="op">(</span><span class="va">FlightDelay</span><span class="op">)</span><span class="op">[[</span><span class="fl">2</span><span class="op">]</span><span class="op">]</span>, TreeLevel <span class="op">=</span> <span class="fl">2</span>, Color4Edge <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span><span class="op">$</span><span class="va">ggp</span></span></code></pre></div>
+</div>
+  </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
+    </nav></aside>
 </div>
 
 
