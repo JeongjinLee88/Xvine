@@ -27,6 +27,7 @@
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
     <a class="dropdown-item" href="../articles/XvineFlightDelays.html">XvineFlightDelays</a>
+    <a class="dropdown-item" href="../articles/XvineReproducibility.html">XvineReproducibility</a>
     <a class="dropdown-item" href="../articles/XvineWorkflow.html">XvineWorkflow</a>
   </div>
 </li>
@@ -162,20 +163,44 @@ performs the rank transformation.</p></dd>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> V2 + V4 --&gt; V2,V4 ; V3</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> V3 + V5 --&gt; V3,V5 ; V2</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> V1 + V4 --&gt; V1,V4 ; V2,V3</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> V4 + V5 --&gt; V4,V5 ; V2,V3</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> V1 + V5 --&gt; V1,V5 ; V4,V2,V3</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> V1 + V2 --&gt; V1,V2 ; V3</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> V2 + V4 --&gt; V2,V4 ; V3</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> V3 + V5 --&gt; V3,V5 ; V2</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> V1 + V4 --&gt; V1,V4 ; V2,V3</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> V4 + V5 --&gt; V4,V5 ; V2,V3</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> V1 + V5 --&gt; V1,V5 ; V4,V2,V3</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> V1 + V2 --&gt; V1,V2 ; V3</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> V1 + V4 --&gt; V1,V4 ; V3</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> V3 + V5 --&gt; V3,V5 ; V2</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> V2 + V4 --&gt; V2,V4 ; V1,V3</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> V1 + V5 --&gt; V1,V5 ; V2,V3</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> V4 + V5 --&gt; V4,V5 ; V2,V1,V3</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> V4 + V5 --&gt; V4,V5 ; V1,V2,V3</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> V1 + V2 --&gt; V1,V2 ; V3</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> V2 + V4 --&gt; V2,V4 ; V3</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> V3 + V5 --&gt; V3,V5 ; V2</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> V1 + V4 --&gt; V1,V4 ; V2,V3</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> V1 + V5 --&gt; V1,V5 ; V2,V3</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> V4 + V5 --&gt; V4,V5 ; V1,V2,V3</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> V1 + V2 --&gt; V1,V2 ; V3</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> V2 + V4 --&gt; V2,V4 ; V3</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> V3 + V5 --&gt; V3,V5 ; V2</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> V1 + V4 --&gt; V1,V4 ; V2,V3</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> V4 + V5 --&gt; V4,V5 ; V2,V3</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> V1 + V5 --&gt; V1,V5 ; V4,V2,V3</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> V1 + V2 --&gt; V1,V2 ; V3</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> V2 + V4 --&gt; V2,V4 ; V3</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> V3 + V5 --&gt; V3,V5 ; V2</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> V1 + V4 --&gt; V1,V4 ; V2,V3</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> V4 + V5 --&gt; V4,V5 ; V2,V3</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> V1 + V5 --&gt; V1,V5 ; V4,V2,V3</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> V1 + V2 --&gt; V1,V2 ; V3</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> V2 + V4 --&gt; V2,V4 ; V3</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> V3 + V5 --&gt; V3,V5 ; V2</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> V1 + V4 --&gt; V1,V4 ; V2,V3</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> V1 + V5 --&gt; V1,V5 ; V2,V3</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> V4 + V5 --&gt; V4,V5 ; V1,V2,V3</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> V1 + V2 --&gt; V1,V2 ; V3</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> V2 + V4 --&gt; V2,V4 ; V3</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> V3 + V5 --&gt; V3,V5 ; V2</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> V1 + V4 --&gt; V1,V4 ; V2,V3</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> V1 + V5 --&gt; V1,V5 ; V2,V3</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> V4 + V5 --&gt; V4,V5 ; V1,V2,V3</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> V1 + V2 --&gt; V1,V2 ; V3</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> V2 + V4 --&gt; V2,V4 ; V3</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> V3 + V5 --&gt; V3,V5 ; V2</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> V1 + V4 --&gt; V1,V4 ; V2,V3</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> V1 + V5 --&gt; V1,V5 ; V2,V3</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> V4 + V5 --&gt; V4,V5 ; V1,V2,V3</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> V1 + V2 --&gt; V1,V2 ; V3</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> V2 + V4 --&gt; V2,V4 ; V3</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> V3 + V5 --&gt; V3,V5 ; V2</span>
@@ -198,32 +223,8 @@ performs the rank transformation.</p></dd>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> V2 + V4 --&gt; V2,V4 ; V3</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> V3 + V5 --&gt; V3,V5 ; V2</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> V1 + V4 --&gt; V1,V4 ; V2,V3</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> V4 + V5 --&gt; V4,V5 ; V2,V3</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> V1 + V5 --&gt; V1,V5 ; V4,V2,V3</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> V1 + V2 --&gt; V1,V2 ; V3</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> V2 + V4 --&gt; V2,V4 ; V3</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> V3 + V5 --&gt; V3,V5 ; V2</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> V1 + V4 --&gt; V1,V4 ; V2,V3</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> V4 + V5 --&gt; V4,V5 ; V2,V3</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> V1 + V5 --&gt; V1,V5 ; V4,V2,V3</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> V1 + V2 --&gt; V1,V2 ; V3</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> V2 + V4 --&gt; V2,V4 ; V3</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> V3 + V5 --&gt; V3,V5 ; V2</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> V1 + V4 --&gt; V1,V4 ; V2,V3</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> V4 + V5 --&gt; V4,V5 ; V2,V3</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> V1 + V5 --&gt; V1,V5 ; V4,V2,V3</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> V1 + V2 --&gt; V1,V2 ; V3</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> V2 + V4 --&gt; V2,V4 ; V3</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> V3 + V5 --&gt; V3,V5 ; V2</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> V1 + V4 --&gt; V1,V4 ; V2,V3</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> V4 + V5 --&gt; V4,V5 ; V2,V3</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> V1 + V5 --&gt; V1,V5 ; V4,V2,V3</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> V1 + V2 --&gt; V1,V2 ; V3</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> V2 + V4 --&gt; V2,V4 ; V3</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> V3 + V5 --&gt; V3,V5 ; V2</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> V1 + V4 --&gt; V1,V4 ; V2,V3</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> V4 + V5 --&gt; V4,V5 ; V2,V3</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> V1 + V5 --&gt; V1,V5 ; V4,V2,V3</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> V1 + V5 --&gt; V1,V5 ; V2,V3</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> V4 + V5 --&gt; V4,V5 ; V1,V2,V3</span>
 <span class="r-plt img"><img src="mBICplot-1.png" alt="" width="700" height="433"></span>
 </code></pre></div>
     </div>
