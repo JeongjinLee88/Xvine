@@ -25,6 +25,7 @@ library(graphicalExtremes)
 library(VineCopula)
 ```
 
+
 ####    2. Load flight delays data
 
 The flight delays dataset consists of the sample size of $n=3603$ and $d=29$ variables.

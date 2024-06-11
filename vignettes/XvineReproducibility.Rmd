@@ -24,6 +24,7 @@ The X-Vine package requires other packages: `VineCopula` and `graphicalExtremes`
 ```{r, echo=TRUE,message=FALSE,warning=FALSE}
 library(Xvine)
 library(VineCopula)
+library(ggplot2)
 ```
 
 
@@ -60,6 +61,8 @@ Instead of using these Pareto samples directly, we perform a rank transformation
 Setting a threshold $k/n=0.05$ of the uniform margin $\widehat{U}_{i,j}$, we obtain ML estimates under 200 repeated iterations.
 We also convert the ML estimates to dependence measure coefficients: the tail dependence coefficient for $e\in E_1$ and Kendall's tau for $e\in E_i$, $i>1$ using the parametric relationships.
 In Fig 3. (b), we select the families of bivariate parametric (tail) copulas along the vine tree sequence.
+
+In Fig. 7 
 
 ```{r, include=FALSE}
 # n = 1000, 2000, 4000 / k/n = 0.02, 0.05, 0.1
@@ -119,13 +122,35 @@ scale_y_continuous(breaks = seq(-0.4,0.8,0.2),limits = c(-0.4,0.8))
 BP_DEP_FAM
 ```
 
+####  Box-plots of ML estimates for the tail copula density linked to a specific edge.
+
+Create box-plots of parameter estimates for a single parameter (gammas or theta, etc)
+Now, we consider the box-plots of ML estimates for the H\"{u}sler-Reiss tail copula density linked to the edge $e=\{1,2\}\in E_1$, using 
+Similar results are observed with other tail copula densities.
+
+Fig 8. (a) $n=1,000$ 
+
+```{r, eval=FALSE}
+# n = 1000, 2000, 4000 / k/n = 0.02, 0.05, 0.1
+ite=200
+BoxOut1K02=XVineBoxplot(N = 1000, qt = 0.02, ite = ite, XVS = XVS, RankT = T)
+BoxOut1K05=XVineBoxplot(N = 1000, qt = 0.05, ite = ite, XVS = XVS, RankT = T)
+BoxOut1K1=XVineBoxplot(N = 1000, qt = 0.1, ite = ite, XVS = XVS, RankT = T)
+
+BoxPar1K=XVineBoxPlotEachPar(BoxOut1 = BoxOut1K02$MLE_WithoutFamSel,BoxOut2 = BoxOut1K05$MLE_WithoutFamSel,BoxOut3 = BoxOut1K1$MLE_WithoutFamSel,
+                             RowInd = 1,ColInd = 2,XVS = XVS)
+BoxPar1K$BoxOnePar+labs(title="",x="", y = "") +
+scale_x_discrete(labels=c("k=20","k=50","k=100"))
+```
+
+
 #### 4. Simulation for the selection of bivariate parametric families
 
 `XVineFamSelSimul` returns simulation results of selecting bivariate parametric families by calling the function [XVineFamSel()].
 All information about the simulation result is saved in the list of `FamSelOut`.
 Table 1. (a) and (b)
 
-```{r, include=FALSE}
+```{r, eval=FALSE}
 start <- Sys.time()
 FamSelOut <- XVineFamSelSimul(N = 4000, qt = 0.05, ite = 200, XVS = XVS
  ,edgeIndex = c(4,5), familyset_tc=c(1:4), familyset_cop = c(0,1,3,4,5,6,13,14,16))
@@ -191,12 +216,11 @@ After the vine tree sequence is selected, we choose bivariate parametric familie
 Fig. 4 (a) mBIC (b) chi-plot for a full model (c) chi-plot for truncated X-vine model
 
 
-```{r,include=FALSE}
+```{r, eval=FALSE}
 set.seed(1953)
-Dat_P=ParetoSim(n = 1000, XVS = XVS) # Pareto scale
-XvinePa50dim=Dat_P
+XVinePa50dim=ParetoSim(n = 1000, XVS = XVS) # Pareto scale
 
-start <- Sys.time()
+#Time difference of 26.23817 mins
 XVineFitOut=XVineModelFit(data = 1/Dat_P, N = 5000, XVS = XVS
           , Rank = FALSE, Rank_chiL = FALSE, Rank_chi3 = FALSE
           , Chi3_graph = FALSE, Rank_Vario = FALSE, Vario_graph = FALSE
@@ -204,12 +228,10 @@ XVineFitOut=XVineModelFit(data = 1/Dat_P, N = 5000, XVS = XVS
           , selectioncrit = "AIC", trunclevel = FALSE, progress = TRUE
           , treecritT1 = "chi", treecritT2 = "tau", effsampsize = 10
           , tau_threshold = 0.05, weights = NA, cores=1)
-print( Sys.time() - start )
-#Time difference of 26.23817 mins
 XVineFitOut$mBIC_g
 XVineFitOut$ChiLPlot
 
-start <- Sys.time()
+
 XVineTrunOut=XVineModelFit(data = 1/Dat_P, N = 5000, XVS = XVS
           , Rank = FALSE, Rank_chiL = FALSE, Rank_chi3 = FALSE
           , Chi3_graph = FALSE, Rank_Vario = FALSE, Vario_graph = FALSE
@@ -217,12 +239,11 @@ XVineTrunOut=XVineModelFit(data = 1/Dat_P, N = 5000, XVS = XVS
           , selectioncrit = "AIC", trunclevel = 19, progress = TRUE
           , treecritT1 = "chi", treecritT2 = "tau", effsampsize = 10
           , tau_threshold = 0.05, weights = NA, cores=1)
-print( Sys.time() - start )
 # Time difference of 18.49413 mins
 XVineTrunOut$ChiLPlot
 ```
 
-```{r,eval=FALSE}
+```{r, eval=FALSE}
 XVineFitOut$ChiLPlot +
 scale_x_continuous(breaks = seq(0.5,1,by=0.1),limits = c(0.45,1)) +
 scale_y_continuous(breaks = seq(0.5,1,by=0.1),limits = c(0.45,1))
@@ -233,6 +254,9 @@ scale_y_continuous(breaks = seq(0.5,1,by=0.1),limits = c(0.45,1))
 
 XVineFitOut$mBIC_g
 ```
+
+
+
 
 
 

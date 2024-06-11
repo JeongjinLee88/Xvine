@@ -77,7 +77,7 @@ FamMtx <- matrix(c(0, 1, 2, 3, 4,
                    0, 0, 0, 0, 0),5,byrow = TRUE)
 # X-vine specification
 XVS=XVineSpec(M = StrMtx, Mmod = FamMtx, Mpar = ParMtx)
-# To run, uncomment it.
+# Not to run (Approx 1 min)
 # XVineBoxplot(N = 500, qt = 0.05, ite = ite, XVS = XVS, RankT = TRUE)
 }
 \references{
