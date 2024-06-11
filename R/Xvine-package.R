@@ -3,6 +3,7 @@
 
 ## usethis namespace: start
 #' @importFrom ggplot2 aes
+#' @importFrom ggplot2 coord_flip
 #' @importFrom ggplot2 element_blank
 #' @importFrom ggplot2 element_line
 #' @importFrom ggplot2 element_rect

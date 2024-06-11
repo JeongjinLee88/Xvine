@@ -1,0 +1,239 @@
+---
+title: "XvineReproducibility"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{XvineReproducibility}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+
+
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+### 1. Load required packages.
+
+The X-Vine package requires other packages: `VineCopula` and `graphicalExtremes`.
+
+```{r, echo=TRUE,message=FALSE,warning=FALSE}
+library(Xvine)
+library(VineCopula)
+```
+
+
+### 2. X-Vine specification.
+
+`XVineSpec()` function specifies the X-Vine specification $(\mathcal{V},\mathcal{R},\mathcal{C})$; vine tree structure matrix, family matrix for bivariate parametric (tail) copula families, and the associated parameter matrix. 
+
+```{r, include=FALSE}
+StrMtx <- matrix(c(1, 1, 2, 2, 4,
+                   0, 2, 1, 3, 2,
+                   0, 0, 3, 1, 3,
+                   0, 0, 0, 4, 1,
+                   0, 0, 0, 0, 5),5,byrow = T)
+ParMtx <- matrix(c(0, 1.5, 2, 2.5, 2,
+                   0, 0, 2, 2.5, 0.7,
+                   0, 0, 0, 0.4, -0.3,
+                   0, 0, 0, 0, 0.1,
+                   0, 0, 0, 0, 0),5,byrow = T)
+FamMtx <- matrix(c(0, 1, 2, 3, 4,
+                   0, 0, 3, 4, 1,
+                   0, 0, 0, 3, 1,
+                   0, 0, 0, 0, 1,
+                   0, 0, 0, 0, 0),5,byrow = T)
+XVS=XVineSpec(M = StrMtx, Mmod = FamMtx, Mpar = ParMtx)
+```
+
+
+### 3. Create box-plots of ML estimates in terms of dependence measure coefficients, using different (n,k).
+
+`XVineBoxPlot()` creates box-plots of parameter estimates of dependence measure coefficients for X-vine models. 
+In Fig 3. (a), we are given the X-Vine structure and selected bivariate parametric families. 
+We draw multivariate Pareto random samples of size $N=4000$.
+Instead of using these Pareto samples directly, we perform a rank transformation and take sub-samples to investigate results with respect to threshold exceedances.
+Setting a threshold $k/n=0.05$ of the uniform margin $\widehat{U}_{i,j}$, we obtain ML estimates under 200 repeated iterations.
+We also convert the ML estimates to dependence measure coefficients: the tail dependence coefficient for $e\in E_1$ and Kendall's tau for $e\in E_i$, $i>1$ using the parametric relationships.
+In Fig 3. (b), we select the families of bivariate parametric (tail) copulas along the vine tree sequence.
+
+```{r, include=FALSE}
+# n = 1000, 2000, 4000 / k/n = 0.02, 0.05, 0.1
+BoxOut4K05=XVineBoxplot(N = 4000, qt = 0.05, ite = 200, XVS = XVS, RankT = TRUE)
+
+d=5 # the number of variables
+TrueMtx_dep=t(DependMtx(XVS)) # Dependence measures
+y0s <- c(TrueMtx_dep[lower.tri(TrueMtx_dep)])
+dLines <- data.frame(X =1:choose(d,2) - 0.4,
+                     Y = y0s,
+                     Xend = 1:choose(d,2) + 0.4,
+                     Yend = y0s,
+                     Group = c("typeA"),
+                     color = c("red"))
+  
+BP_DEP_SPE <- BoxOut4K05$bp_dep_SPE +
+scale_fill_manual(labels=c(expression(T[1]),expression(T[2]),expression(T[3]),expression(T[4])),values=c("lightskyblue","lightgreen","lavender","papayawhip")) +
+theme(legend.title = element_blank()
+     ,legend.text = element_text(face="bold",size=15)
+     ,legend.key.size = unit(1, 'cm')
+     ,legend.position="none"
+     ,aspect.ratio = 1
+     ,axis.text.x = element_text(color="black", face="bold", size=9, angle = 30, hjust = 0.5)
+     ,axis.text.y = element_text(face="bold", size=9)
+     ,panel.background = element_rect(fill = "white"
+     ,colour = "white"
+     ,linewidth = 0.5, linetype = "solid")
+     ,panel.grid.major = element_line(linewidth = 0.5, linetype = 'solid',
+                                                        colour = "grey")
+     ,panel.grid.minor = element_line(linewidth = 0.25, linetype = 'solid',
+                                                        colour = "grey")
+     ,plot.margin = margin(0, 1, 0, 0, "cm")) +
+scale_x_discrete(labels=c(expression(atop(chi[12],"\n(HR)")),expression(atop(chi[23],"\n(NL)")),expression(atop(chi[24],"\n(L)")),expression(atop(chi[45],"\n(Diri)")),expression(atop(tau[13~";"~2],"\n(Clay)")),expression(atop(tau[34~";"~2],"\n(Gum)")),expression(atop(tau[25~";"~4],"\n(Ga)")),expression(atop(tau[14~";"~23],"\n(Clay)")),expression(atop(tau[35~";"~24],"\n(Ga)")),expression(atop(tau[15~";"~234],"\n(Ga)")))) +
+scale_y_continuous(breaks = seq(-0.4,0.8,0.2),limits = c(-0.4,0.8)) +
+geom_segment(data = dLines, color = "red",aes(x = X, y = Y, xend = Xend, yend=Yend), inherit.aes = FALSE)
+BP_DEP_SPE
+
+BP_DEP_FAM <- BoxOut4K05$bp_dep_Fam +
+scale_fill_manual(labels=c(expression(T[1]),expression(T[2]),expression(T[3]),expression(T[4])),values=c("lightskyblue","lightgreen","lavender","papayawhip")) +
+theme(legend.title = element_blank()
+     ,legend.text = element_text(face="bold",size=15)
+     ,legend.key.size = unit(1, 'cm')
+     ,legend.position="none"
+     ,aspect.ratio = 1
+     ,axis.text.x = element_text(color="black", face="bold", size=9, angle = 30, hjust = 0.5)
+     ,axis.text.y = element_text(face="bold", size=9)
+     ,panel.background = element_rect(fill = "white"
+     ,colour = "white"
+     ,linewidth = 0.5, linetype = "solid")
+     ,panel.grid.major = element_line(linewidth = 0.5, linetype = 'solid',
+                                                        colour = "grey")
+     ,panel.grid.minor = element_line(linewidth = 0.25, linetype = 'solid',
+                                                        colour = "grey")
+     ,plot.margin = margin(0, 1, 0, 0, "cm")) +
+geom_segment(data = dLines, color = "red",aes(x = X, y = Y, xend = Xend, yend=Yend), inherit.aes = FALSE) + scale_x_discrete(labels=c(expression(chi[12]),expression(chi[23]),expression(chi[24]),expression(chi[45]),expression(tau[13~";"~2]),expression(tau[34~";"~2]),expression(tau[25~";"~4]),expression(tau[14~";"~23]),expression(tau[35~";"~24]),expression(tau[15~";"~234]))) +
+scale_y_continuous(breaks = seq(-0.4,0.8,0.2),limits = c(-0.4,0.8))
+BP_DEP_FAM
+```
+
+#### 4. Simulation for the selection of bivariate parametric families
+
+`XVineFamSelSimul` returns simulation results of selecting bivariate parametric families by calling the function [XVineFamSel()].
+All information about the simulation result is saved in the list of `FamSelOut`.
+Table 1. (a) and (b)
+
+```{r, include=FALSE}
+start <- Sys.time()
+FamSelOut <- XVineFamSelSimul(N = 4000, qt = 0.05, ite = 200, XVS = XVS
+ ,edgeIndex = c(4,5), familyset_tc=c(1:4), familyset_cop = c(0,1,3,4,5,6,13,14,16))
+print( Sys.time() - start )
+FamSelOut$EdgeProp
+FamSelOut$EffSizePercent
+```
+
+
+### 5. 50 dimensional X-vine specification 
+
+
+```{r, eval=FALSE}
+##  2. A 50-dim X-vine model where HR and NL in T1 and Gaussian copulas in Ti, i>1
+Dim=50
+StrMtx=matrix(0,nrow = Dim,ncol = Dim)
+for(i in 1:Dim){
+  for(j in i:Dim){
+    StrMtx[i,j]=i # C-vine
+  }
+}
+set.seed(1220)
+FamMtx=matrix(0,Dim,Dim)
+for(i in 1:Dim){
+  for(j in i:Dim){
+    if(i==1){
+    FamMtx[1,j]=sample(c(1,2),size = 1,replace = T) # assign randomly HR and NL in T1
+    }else{
+    FamMtx[i,j]=1 # assign all Gaussian copulas in Ti, i>1
+    }
+  }
+}
+diag(FamMtx)=0
+set.seed(1220)
+ParMtx=matrix(0,nrow = Dim,ncol = Dim)
+for(i in 1:Dim){ 
+  for(j in i:Dim){
+    if(i==1){
+      ParMtx[1,j]=runif(1,1,2)  # Parameter values on (1,2)
+    }
+    if(1 < i & i <= 9){
+      ParMtx[i,j]=1.1-0.1*i
+    }
+    if(i > 9){
+      ParMtx[i,j]=0.1 # same partial correlation 0.5 for Ti
+    }
+  }
+}
+diag(ParMtx)=0
+##  X-Vine specification (Vine structure, Bivariate parametric families, Parameters)
+XVS=XVineSpec(M = StrMtx, Mmod = FamMtx, Mpar = ParMtx)
+```
+
+
+### 6. Fitting X-vine models.
+
+We estimate all three components of the X-vine specification $(\mathcal{V},\mathcal{R},\mathcal{C})$.
+We draw multivariate Pareto samples of size $n=1\,000$. 
+Using the (lower) tail dependence coefficient $\hat{\chi}_e$ for $e\in E_1$ as edge weight and the Kendall's tau $\hat{\tau}_e$ for $e\in E_i$, $i\ge 2$, we first estimate the vine tree sequence sequentially from $\T_1$ to $\T_{d-1}$ that satisfies the proximity condition.
+For the purpose of capturing as much extremal dependence as possible in the first several trees, we find maximum spanning trees.
+After the vine tree sequence is selected, we choose bivariate parametric families for each edge in each tree and estimate the associated parameter(s).
+
+Fig. 4 (a) mBIC (b) chi-plot for a full model (c) chi-plot for truncated X-vine model
+
+
+```{r,include=FALSE}
+set.seed(1953)
+Dat_P=ParetoSim(n = 1000, XVS = XVS) # Pareto scale
+XvinePa50dim=Dat_P
+
+start <- Sys.time()
+XVineFitOut=XVineModelFit(data = 1/Dat_P, N = 5000, XVS = XVS
+          , Rank = FALSE, Rank_chiL = FALSE, Rank_chi3 = FALSE
+          , Chi3_graph = FALSE, Rank_Vario = FALSE, Vario_graph = FALSE
+          , tcfamset = c(1:4), pcfamset = c(0,1,3,4,5,6,13,14,16)
+          , selectioncrit = "AIC", trunclevel = FALSE, progress = TRUE
+          , treecritT1 = "chi", treecritT2 = "tau", effsampsize = 10
+          , tau_threshold = 0.05, weights = NA, cores=1)
+print( Sys.time() - start )
+#Time difference of 26.23817 mins
+XVineFitOut$mBIC_g
+XVineFitOut$ChiLPlot
+
+start <- Sys.time()
+XVineTrunOut=XVineModelFit(data = 1/Dat_P, N = 5000, XVS = XVS
+          , Rank = FALSE, Rank_chiL = FALSE, Rank_chi3 = FALSE
+          , Chi3_graph = FALSE, Rank_Vario = FALSE, Vario_graph = FALSE
+          , tcfamset = c(1:4), pcfamset = c(0,1,3,4,5,6,13,14,16)
+          , selectioncrit = "AIC", trunclevel = 19, progress = TRUE
+          , treecritT1 = "chi", treecritT2 = "tau", effsampsize = 10
+          , tau_threshold = 0.05, weights = NA, cores=1)
+print( Sys.time() - start )
+# Time difference of 18.49413 mins
+XVineTrunOut$ChiLPlot
+```
+
+```{r,eval=FALSE}
+XVineFitOut$ChiLPlot +
+scale_x_continuous(breaks = seq(0.5,1,by=0.1),limits = c(0.45,1)) +
+scale_y_continuous(breaks = seq(0.5,1,by=0.1),limits = c(0.45,1))
+
+XVineTrunOut$ChiLPlot +
+scale_x_continuous(breaks = seq(0.5,1,by=0.1),limits = c(0.45,1)) +
+scale_y_continuous(breaks = seq(0.5,1,by=0.1),limits = c(0.45,1))
+
+XVineFitOut$mBIC_g
+```
+
+
+
+
