@@ -17,7 +17,7 @@ knitr::opts_chunk$set(
 )
 ```
 
-### 1. Load required packages.
+###   1. Load required packages.
 
 The X-Vine package requires other packages: `VineCopula` and `graphicalExtremes`.
 
@@ -28,7 +28,7 @@ library(ggplot2)
 ```
 
 
-### 2. X-Vine specification.
+###   2. X-Vine specification.
 
 `XVineSpec()` function specifies the X-Vine specification $(\mathcal{V},\mathcal{R},\mathcal{C})$; vine tree structure matrix, family matrix for bivariate parametric (tail) copula families, and the associated parameter matrix. 
 
@@ -52,20 +52,22 @@ XVS=XVineSpec(M = StrMtx, Mmod = FamMtx, Mpar = ParMtx)
 ```
 
 
-### 3. Create box-plots of ML estimates in terms of dependence measure coefficients, using different (n,k).
+###   3. Create box-plots of parameter estimates for X-vine models.
 
-`XVineBoxPlot()` creates box-plots of parameter estimates of dependence measure coefficients for X-vine models. 
-In Fig 3. (a), we are given the X-Vine structure and selected bivariate parametric families. 
-We draw multivariate Pareto random samples of size $N=4000$.
+This section is to reproduce Fig 3. (a) and (b), and Fig7.
+
+Given the X-Vine structure and selected bivariate parametric families, we draw multivariate (generalized) Pareto samples of size $N=4000$ and set a threshold $k/n=0.05$ of the uniform margin $\widehat{U}_{i,j}$
 Instead of using these Pareto samples directly, we perform a rank transformation and take sub-samples to investigate results with respect to threshold exceedances.
-Setting a threshold $k/n=0.05$ of the uniform margin $\widehat{U}_{i,j}$, we obtain ML estimates under 200 repeated iterations.
+We obtain ML estimates under 200 repeated iterations.
 We also convert the ML estimates to dependence measure coefficients: the tail dependence coefficient for $e\in E_1$ and Kendall's tau for $e\in E_i$, $i>1$ using the parametric relationships.
-In Fig 3. (b), we select the families of bivariate parametric (tail) copulas along the vine tree sequence.
+Fig 3. (a) shows box-plots of dependence measure estimates from specified bivairate parametric families.
+Varying $(n,k)$, we can reproduce box-plots in Fig. 7.
+For Fig 3. (b), bivariate parametric (tail) families are selected sequentially from the data along the vine tree sequence.
 
-In Fig. 7 
 
 ```{r, include=FALSE}
 # n = 1000, 2000, 4000 / k/n = 0.02, 0.05, 0.1
+# Time difference of 1.068745 mins
 BoxOut4K05=XVineBoxplot(N = 4000, qt = 0.05, ite = 200, XVS = XVS, RankT = TRUE)
 
 d=5 # the number of variables
@@ -122,13 +124,12 @@ scale_y_continuous(breaks = seq(-0.4,0.8,0.2),limits = c(-0.4,0.8))
 BP_DEP_FAM
 ```
 
-####  Box-plots of ML estimates for the tail copula density linked to a specific edge.
 
-Create box-plots of parameter estimates for a single parameter (gammas or theta, etc)
-Now, we consider the box-plots of ML estimates for the H\"{u}sler-Reiss tail copula density linked to the edge $e=\{1,2\}\in E_1$, using 
-Similar results are observed with other tail copula densities.
+####    4. Box-plots of ML estimates for the tail copula density linked to a specific edge.
 
-Fig 8. (a) $n=1,000$ 
+This section is to reproduce Fig 8.
+`XVineBoxplot()` creates box-plots of parameter estimates for a parameter ($\Gamma$ or $\theta$, etc.) corresponding a specific edge.
+In Fig 8., we consider the box-plots of ML estimates for the H\"{u}sler-Reiss tail copula density linked to the edge $e=\{1,2\}\in E_1$, using different $(n,k)$.
 
 ```{r, eval=FALSE}
 # n = 1000, 2000, 4000 / k/n = 0.02, 0.05, 0.1
@@ -144,27 +145,30 @@ scale_x_discrete(labels=c("k=20","k=50","k=100"))
 ```
 
 
-#### 4. Simulation for the selection of bivariate parametric families
+####    5. Simulation for the selection of bivariate parametric families
 
-`XVineFamSelSimul` returns simulation results of selecting bivariate parametric families by calling the function [XVineFamSel()].
+This section is to reproduce Table 1. (a) and (b).
+`XVineFamSelSimul()` returns simulation results of selecting bivariate parametric families by calling the function `XVineFamSel()`.
 All information about the simulation result is saved in the list of `FamSelOut`.
-Table 1. (a) and (b)
+
 
 ```{r, eval=FALSE}
-start <- Sys.time()
+# Time difference of 1.115222 mins
 FamSelOut <- XVineFamSelSimul(N = 4000, qt = 0.05, ite = 200, XVS = XVS
  ,edgeIndex = c(4,5), familyset_tc=c(1:4), familyset_cop = c(0,1,3,4,5,6,13,14,16))
-print( Sys.time() - start )
 FamSelOut$EdgeProp
 FamSelOut$EffSizePercent
+FamSelOut$GlobalProp
 ```
 
 
 ### 5. 50 dimensional X-vine specification 
 
+Now, we consider a 50-dimensional C-vine where the first tree includes the
+H\"{u}sler–Reiss models and negative logistic models with randomly assigned parameter values $\theta_e \in [1, 2]$ for $e \in E_1$. 
+Subsequent trees contain bivariate Gaussian copulas with partial correlations $\rho_e = 1.1 − 0.1j$ for $e \in E_j$ and $j \in \{2, . . . , 9\}$, and $\rho_e = 0.1$ for $e \in E_j$ with $j \ge 10$.
 
 ```{r, eval=FALSE}
-##  2. A 50-dim X-vine model where HR and NL in T1 and Gaussian copulas in Ti, i>1
 Dim=50
 StrMtx=matrix(0,nrow = Dim,ncol = Dim)
 for(i in 1:Dim){
@@ -201,24 +205,27 @@ for(i in 1:Dim){
 }
 diag(ParMtx)=0
 ##  X-Vine specification (Vine structure, Bivariate parametric families, Parameters)
+# Time difference of 1.115222 mins
 XVS=XVineSpec(M = StrMtx, Mmod = FamMtx, Mpar = ParMtx)
 ```
 
 
-### 6. Fitting X-vine models.
+###   6. Fitting X-vine models.
 
-We estimate all three components of the X-vine specification $(\mathcal{V},\mathcal{R},\mathcal{C})$.
+This section is to reproduce Fig 4.
+Now, we estimate all three components of the X-vine specification $(\mathcal{V},\mathcal{R},\mathcal{C})$.
 We draw multivariate Pareto samples of size $n=1\,000$. 
 Using the (lower) tail dependence coefficient $\hat{\chi}_e$ for $e\in E_1$ as edge weight and the Kendall's tau $\hat{\tau}_e$ for $e\in E_i$, $i\ge 2$, we first estimate the vine tree sequence sequentially from $T_1$ to $T_{d-1}$ that satisfies the proximity condition.
 For the purpose of capturing as much extremal dependence as possible in the first several trees, we find maximum spanning trees.
 After the vine tree sequence is selected, we choose bivariate parametric families for each edge in each tree and estimate the associated parameter(s).
-
-Fig. 4 (a) mBIC (b) chi-plot for a full model (c) chi-plot for truncated X-vine model
-
+Fig 4. (a) The mBIC plotted across tree levels with a dotted line indicating the selected mBIC-optimal truncation level of $q^∗ = 19$.
+Fig 4. (b) $\chi$-plot comparing pairwise $\chi$ values from the specified X-vine model to those obtained from the fitted X-vine model via Monte Carlo simulations. Fig 4. (c) $\chi$-plot for the truncated X-vine model.
 
 ```{r, eval=FALSE}
-set.seed(1953)
-XVinePa50dim=ParetoSim(n = 1000, XVS = XVS) # Pareto scale
+# 'XVinePa50dim.Rdata' is included in the Xvine package.
+# Time difference of 7.086743 mins
+#set.seed(1953)
+#XVinePa50dim=ParetoSim(n = 1000, XVS = XVS) # Pareto scale
 
 #Time difference of 26.23817 mins
 XVineFitOut=XVineModelFit(data = 1/XVinePa50dim, N = 5000, XVS = XVS

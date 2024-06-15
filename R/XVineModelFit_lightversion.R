@@ -6,12 +6,14 @@ XVineModelFit_lightversion <- function(data, Rank=TRUE, MST1_HR=FALSE, quan=0.2,
   ##  Note that the 'XVineModelFit' function uses multivariate 'inverted' Pareto samples
   ##  If you directly use samples from the limiting distribution, they must be ones from Pareto distribution with Pareto margin.
   if(Rank){
-    data <- ParetoTransRank(data = data, u_quan = quan, scaleType = "U") 
+    Dat_U <- ParetoTransRank(data = data, u_quan = quan, scaleType = "U") 
+  }else{
+    Dat_U <- 1/data #switch to Uniform scale from Pareto scale
   }
   # Determine the truncation level if specified.
-  d <- ifelse(test = trunclevel,trunclevel+1,ncol(data))
-  d_col <- ncol(data)
-  n <- nrow(data)
+  d <- ifelse(test = trunclevel,trunclevel+1,ncol(Dat_U))
+  d_col <- ncol(Dat_U)
+  n <- nrow(Dat_U)
   # Determine the selection criteria for T_1 and T_i, i=2,...
   T1crit <- TreeCrit(treecrit = treecritT1)
   Ticrit <- TreeCrit(treecrit = treecritT2)
@@ -23,16 +25,16 @@ XVineModelFit_lightversion <- function(data, Rank=TRUE, MST1_HR=FALSE, quan=0.2,
   if(MST1_HR){
     MST[[1]] <- MST_HR(Dat_Pareto = data,quan = quan)
   }else{
-    g <- InitializeFirstGraph(data, T1crit, weights)
+    g <- InitializeFirstGraph(Dat_U, T1crit, weights)
     MST[[1]] <- findMST(g, mode = "RVine")
   }
-  VineTree[[1]] <- fit.FirstTree(MST[[1]], data, tcfamset, si=si,
+  VineTree[[1]] <- fit.FirstTree(MST[[1]], Dat_U, tcfamset, si=si,
                                  selectioncrit = selectioncrit)
   if(d > 2){
     for (tree in 2:(d - 1)) { # tree=2,3,4
       g <- BuildNextGraph(VineTree[[tree-1]], weights, treecrit = Ticrit, truncated = FALSE)
       MST[[tree]] <- findMST(g, mode = "RVine", truncated = FALSE)
-      VineTree[[tree]] <- fit.SubTree(data = data, MST = MST, VineTree = VineTree, copfamset = pcfamset, tree = tree, si=si,
+      VineTree[[tree]] <- fit.SubTree(data = Dat_U, MST = MST, VineTree = VineTree, copfamset = pcfamset, tree = tree, si=si,
                                       selectioncrit, progress, effsampsize = effsampsize, tau_threshold = tau_threshold, weights = weights, 
                                       se = se, cores = cores)
     }  

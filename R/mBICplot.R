@@ -67,7 +67,7 @@ mBICplot <- function(data, Rank=TRUE, quan, famset_tc=c(1:4), famset_pc=c(0,1,3,
   colnames(mBICmtx)=c("Quantile","mBIC")
   mBICmtx=as.data.frame(mBICmtx)
   mBICvsQuan <- ggplot(data = mBICmtx,aes(x=Quantile,y=mBIC)) +
-                labs(y="mBIC values") +
+                labs(y = expression(paste("mBIC-optimal truncation level ", "(q"^{""}, "*", ")"))) +
                 geom_point(size=2.5) +
                 theme(legend.title = element_blank(), axis.title=element_text(size=14)
                  ,axis.title.y = element_text(face="bold")

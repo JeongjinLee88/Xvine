@@ -87,12 +87,14 @@ XVineModelFit <- function(data, Rank=TRUE, Rank_chiL=FALSE, Rank_Vario=FALSE, Ra
   ##  Note that the 'XVineModelFit' function uses multivariate 'inverted' Pareto samples
   ##  If you directly use samples from the limiting distribution, they must be ones from Pareto distribution with Pareto margin.
   if(Rank){
-    data <- ParetoTransRank(data = data, u_quan = quan, scaleType = "U") 
+    Dat_U <- ParetoTransRank(data = data, u_quan = quan, scaleType = "U") 
+  }else{
+    Dat_U <- 1/data #switch to Uniform scale from Pareto scale
   }
   # Determine the truncation level if specified.
-  d <- ifelse(test = trunclevel,trunclevel+1,ncol(data))
-  d_col <- ncol(data)
-  n <- nrow(data)
+  d <- ifelse(test = trunclevel,trunclevel+1,ncol(Dat_U))
+  d_col <- ncol(Dat_U)
+  n <- nrow(Dat_U)
   # Determine the selection criteria for T_1 and T_i, i=2,...
   T1crit <- TreeCrit(treecrit = treecritT1)
   Ticrit <- TreeCrit(treecrit = treecritT2)
@@ -104,16 +106,16 @@ XVineModelFit <- function(data, Rank=TRUE, Rank_chiL=FALSE, Rank_Vario=FALSE, Ra
   if(MST1_HR){
     MST[[1]] <- MST_HR(Dat_Pareto = data,quan = quan)
   }else{
-    g <- InitializeFirstGraph(data, T1crit, weights)
+    g <- InitializeFirstGraph(Dat_U, T1crit, weights)
     MST[[1]] <- findMST(g, mode = "RVine")
   }
-  VineTree[[1]] <- fit.FirstTree(MST[[1]], data, tcfamset, si=si,
+  VineTree[[1]] <- fit.FirstTree(MST[[1]], Dat_U, tcfamset, si=si,
                                  selectioncrit = selectioncrit)
   if(d > 2){
     for (tree in 2:(d - 1)) { # tree=2,3,4
       g <- BuildNextGraph(VineTree[[tree-1]], weights, treecrit = Ticrit, truncated = FALSE)
       MST[[tree]] <- findMST(g, mode = "RVine", truncated = FALSE)
-      VineTree[[tree]] <- fit.SubTree(data = data, MST = MST, VineTree = VineTree, copfamset = pcfamset, tree = tree, si=si,
+      VineTree[[tree]] <- fit.SubTree(data = Dat_U, MST = MST, VineTree = VineTree, copfamset = pcfamset, tree = tree, si=si,
                                           selectioncrit, progress, effsampsize = effsampsize, tau_threshold = tau_threshold, weights = weights, 
                                           se = se, cores = cores)
     }  
@@ -259,7 +261,7 @@ XVineModelFit <- function(data, Rank=TRUE, Rank_chiL=FALSE, Rank_Vario=FALSE, Ra
   
   if(Rank_chiL){
     # Empirical chi's vs Fitted chi's
-    emp_chimat <- ChiMtxMC(data) # already rank-based samples
+    emp_chimat <- ChiMtxMC(data,quan=quan) # already rank-based samples
     emp_chimat <- emp_chimat[upper.tri(emp_chimat)]
     XVine_chimat <- ChiMtxMC(FittedDat_P,quan = quan)
     XVine_chimat <- XVine_chimat[upper.tri(XVine_chimat)]
@@ -293,20 +295,25 @@ XVineModelFit <- function(data, Rank=TRUE, Rank_chiL=FALSE, Rank_Vario=FALSE, Ra
   
   if(Vario_graph){ # use samples on Pareto scale
     if(Rank_Vario){
-      emp_Variomat <- emp_vario(data = data,p = 1-quan)
+      #emp_Variomat <- emp_vario(data = data,p = 1-quan)
+      emp_Variomat <- Gamma2chi(emp_vario(data = data,p = 1-quan))
       emp_Variomat <- emp_Variomat[upper.tri(emp_Variomat)]
-      XVine_Variomat <- emp_vario(FittedDat_P,p = 1-quan)
+      #XVine_Variomat <- emp_vario(FittedDat_P,p = 1-quan)
+      XVine_Variomat <- Gamma2chi(emp_vario(FittedDat_P,p = 1-quan))
       XVine_Variomat <- XVine_Variomat[upper.tri(XVine_Variomat)]
     }else{
-      emp_Variomat <- emp_vario(Dat_Pa)
+      #emp_Variomat <- emp_vario(Dat_Pa)
+      emp_Variomat <- Gamma2chi(emp_vario(Dat_Pa))
       emp_Variomat <- emp_Variomat[upper.tri(emp_Variomat)]
-      XVine_Variomat <- emp_chi(FittedDat_P)
+      #XVine_Variomat <- emp_chi(FittedDat_P)
+      XVine_Variomat <- Gamma2chi(emp_vario(FittedDat_P))
       XVine_Variomat <- XVine_Variomat[upper.tri(XVine_Variomat)]
     }
     VarioPlot <- ggplot() +
       geom_point(aes(x = c(emp_Variomat),y = c(XVine_Variomat))) +
       geom_abline(slope = 1, intercept = 0) +
-      labs(title="",x=expression(paste("Empirical"," ",Gamma)), y = expression(paste("Fitted"," ",Gamma))) +
+      #labs(title="",x=expression(paste("Empirical"," ",Gamma)), y = expression(paste("Fitted"," ",Gamma))) +
+      labs(title="",x=expression(paste("Empirical"," ",chi)), y = expression(paste("Fitted"," ",chi))) +
       theme(
         axis.text.x = element_text(color = "black",face="bold", size=14),
         axis.text.y = element_text(face="bold", size =14),
@@ -328,7 +335,7 @@ XVineModelFit <- function(data, Rank=TRUE, Rank_chiL=FALSE, Rank_Vario=FALSE, Ra
   
   if(Chi3_graph){
     if(Rank_chi3){
-      emp_chi3mat <- EmpChiArray(data)
+      emp_chi3mat <- EmpChiArray(data, quan=quan)
       emp_chi3mat <- emp_chi3mat[upper.tri(emp_chi3mat[,,1])]
       XVine_chi3mat <- EmpChiArray(FittedDat_P,quan = quan)
       XVine_chi3mat <- XVine_chi3mat[upper.tri(XVine_chi3mat[,,1])]
