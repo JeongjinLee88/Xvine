@@ -1,3 +1,4 @@
+# Internal function from the VineCopula package by Thomas Nagler and Ulf Schepsmeier and Jakob Stoeber and Eike Christian Brechmann and Benedikt Graeler and Tobias Erhardt
 fastTau <- function (x, y, weights = NA) 
 {
   if (any(is.na(weights))) {

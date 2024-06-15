@@ -1,3 +1,4 @@
+# Internal function from the VineCopula package by Thomas Nagler and Ulf Schepsmeier and Jakob Stoeber and Eike Christian Brechmann and Benedikt Graeler and Tobias Erhardt
 dfs <- function (adjacencyList, v, e = NULL, dfsorder = list()) 
 {
   dfsorder$V <- c(dfsorder$V, v)

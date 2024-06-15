@@ -1,3 +1,4 @@
+# Internal function from the VineCopula package by Thomas Nagler and Ulf Schepsmeier and Jakob Stoeber and Eike Christian Brechmann and Benedikt Graeler and Tobias Erhardt
 InitializeFirstGraph <- function (data, treecrit, weights) 
 {
   all.pairs <- combn(1:ncol(data), 2)

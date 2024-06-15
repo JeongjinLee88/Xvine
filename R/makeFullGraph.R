@@ -1,3 +1,4 @@
+# Internal function from the VineCopula package by Thomas Nagler and Ulf Schepsmeier and Jakob Stoeber and Eike Christian Brechmann and Benedikt Graeler and Tobias Erhardt
 makeFullGraph <- function (d) 
 {
   E <- cbind(do.call(c, lapply(1:(d - 1), function(i) rep(i, 
