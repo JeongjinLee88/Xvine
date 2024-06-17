@@ -5,6 +5,7 @@ vignette: >
   %\VignetteIndexEntry{XvineFlightDelays}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
+bibliography: ../inst/references.bib
 ---
 
 
@@ -30,15 +31,19 @@ library(ggplot2)
 ####    2. Load flight delays data
 
 The raw data-set is accessible through the US Bureau of Transportation Statistics^[http://www.bts.dot.gov]. 
-These flight delay data were analysed by @hentschel2022statistical who first selected airports with a minimum of 1 000 flights per year and applied a k-medoids clustering algorithm to identify homogeneous clusters in terms of extremal dependence.
-Focusing on the H¨usler–Reiss family, @hentschel2022statistical fitted an extremal graphical model to large flight delays of airports in the Texas cluster to investigate conditional independence.
-Following the vignette in Engelke et al. [2022a], we split the data set in half: a training set for model fitting and a test set for tuning parameter selection.
+These flight delay data were analysed by @hentschel2022statistical who first selected airports with a minimum of $1000$ flights per year and applied a k-medoids clustering algorithm to identify homogeneous clusters in terms of extremal dependence.
+Focusing on the H&udblac;sler–Reiss family, @hentschel2022statistical fitted an extremal graphical model to large flight delays of airports in the Texas cluster to investigate conditional independence.
+Following the vignette in @engelke2graphicalextremes, we split the data set in half: a training set for model fitting and a test set for tuning parameter selection.
 The dataset `FlightDelay` consists of the sample size of $n=3603$ and $d=29$ variables.
 
 ```{r, include=FALSE}
 FlightTrain <- drop(graphicalExtremes::getFlightDelayData('delays', 'tcCluster', 'tcTrain'))
 FlightTest <- drop(graphicalExtremes::getFlightDelayData('delays', 'tcCluster', 'tcTest'))
 FlightDelay=rbind(FlightTrain,FlightTest)
+#which(dimnames(FlightDelay)[[1]]>=2020)
+#FlightDelay=FlightDelay[1:3522,] Exclude 2020
+#summary(FlightDelay[3261:3522,])
+#summary(FlightDelay[3523:3603,])
 ```
 
 
@@ -49,6 +54,8 @@ Fig 10. (b) shows a plot comparing empirical trivariate tail dependence coeffici
 
 
 ```{r, eval=FALSE}
+# Time difference of 2.34063 mins
+start <- Sys.time()
 XVineFlightOut=XVineModelFit(data = FlightDelay, N = 3600, XVS = NULL
               , Rank = TRUE, Rank_chiL = TRUE, Rank_chi3 = TRUE
               , Chi3_graph = TRUE, Rank_Vario = TRUE, Vario_graph = FALSE
@@ -56,8 +63,22 @@ XVineFlightOut=XVineModelFit(data = FlightDelay, N = 3600, XVS = NULL
               , selectioncrit = "AIC", trunclevel = FALSE, progress = TRUE
               , treecritT1 = "chi", treecritT2 = "tau", effsampsize = 10
               , tau_threshold = 0.05, weights = NA, cores=1)
-XVineFlightOut$ChiLPlot
-XVineFlightOut$mBIC_g
+print( Sys.time() - start )
+XVineFlightOut$ChiLPlot # chi-plot
+XVineFlightOut$mBIC_g # mBIC-plot
+XVineFlightOut$VineTree[[1]]$E$Copula.type
+sum(XVineFlightOut$VineTree[[1]]$E$Copula.type==3)
+summary(XVineFlightOut$VineTree[[1]]$E$weights)
+table(do.call(c,lapply(2:(29-1),function(i)(XVineFlightOut$VineTree[[i]]$E$Copula.type))))
+
+save(XVineFlightOut,file = "/Users/jlee/Desktop/XVine/Rdata/XVineFlightOut_E2020.Rdata")
+load(file = "/Users/jlee/Desktop/XVine/Rdata/XVineFlightOut_E2020.Rdata")
+
+XVineFlightChiE2020=XVineFlightOut$ChiLPlot+
+scale_x_continuous(n.breaks = 5,limits = c(0.15,0.8))+scale_y_continuous(limits=c(0.15,0.8))+theme(plot.margin = margin(0.5, 0.5, 0.5, 0.5, "cm"))
+XVineFlightmBICE2020=XVineFlightOut$mBIC_g
+ggsave(XVineFlightmBICE2020, file="/Users/jlee/Desktop/XVine/XVineFlightmBICE2020.pdf", width=4, height=4)
+
 ```
 
 ####    4. Sensitive analysis for the mBIC-optimal truncation level across low quantiles.
@@ -67,12 +88,14 @@ Fig 11. (b) shows a plot of the mBIC-optimal truncation level across a sequence 
 ```{r, eval=FALSE}
 # Time difference of 15.89086 mins
 start <- Sys.time()
-mBICplot(FlightDelay, Rank=TRUE, quan=seq(0.05,0.15,length.out=11)
+mBICout=mBICplot(FlightDelay, Rank=TRUE, quan=seq(0.05,0.15,length.out=11)
          , famset_tc=c(1:4), famset_pc=c(0,1,3,4,5,6,13,14,16)
          , selectioncrit="AIC",trunclevel=FALSE
          , treecritT1="chi",treecritT2="tau"
          , effsampsize=10, tau_threshold=0.05, si=0.9)
 print( Sys.time() - start )
+ggsave(mBICout, file="/Users/jlee/Desktop/XVine/mBICsensitive.pdf", width=4, height=4)
+
 ```
 
 
@@ -81,7 +104,7 @@ print( Sys.time() - start )
 Fig 5. (e) shows a chi-plot comparing empirical pairwise tail dependence coefficients with those from the fitted truncated X-vine model.
 
 
-```{r, include=FALSE}
+```{r, eval=FALSE}
 # Time difference of 58.30549 secs
 XVineFlightTruncOut=XVineModelFit(data = FlightDelay, N = 3600, XVS = NULL
               , Rank = TRUE, Rank_chiL = TRUE, Rank_chi3 = TRUE
@@ -91,6 +114,27 @@ XVineFlightTruncOut=XVineModelFit(data = FlightDelay, N = 3600, XVS = NULL
               , treecritT1 = "chi", treecritT2 = "tau", effsampsize = 10
               , tau_threshold = 0.05, weights = NA, cores=1)
 XVineFlightTruncOut$ChiLPlot
+
+
+# Except 2020
+XVineFlightTruncOut=XVineModelFit(data = FlightDelay, N = 3500, XVS = NULL
+              , Rank = TRUE, Rank_chiL = TRUE, Rank_chi3 = TRUE
+              , Chi3_graph = TRUE, Rank_Vario = TRUE, Vario_graph = FALSE
+              , quan=0.13, tcfamset = c(1:4), pcfamset = c(0,1,3,4,5,6,13,14,16)
+              , selectioncrit = "AIC", trunclevel = 8, progress = TRUE
+              , treecritT1 = "chi", treecritT2 = "tau", effsampsize = 10
+              , tau_threshold = 0.05, weights = NA, cores=1)
+
+XVineFlightTruncOut$VineTree[[1]]$E$Copula.type
+sum(XVineFlightTruncOut$VineTree[[1]]$E$Copula.type==3)
+summary(XVineFlightTruncOut$VineTree[[1]]$E$weights)
+table(do.call(c,lapply(2:8,function(i)(XVineFlightTruncOut$VineTree[[i]]$E$Copula.type))))
+XVineFlightTruncChiE2020=XVineFlightTruncOut$ChiLPlot+
+scale_x_continuous(n.breaks = 5,limits = c(0.15,0.8))+scale_y_continuous(limits=c(0.15,0.8))+theme(plot.margin = margin(0.5, 0.5, 0.5, 0.5, "cm"))
+
+save(XVineFlightTruncOut,file = "/Users/jlee/Desktop/XVine/Rdata/XVineFlightTruncOut_E2020.Rdata")
+ggsave(XVineFlightTruncChiE2020, file="/Users/jlee/Desktop/XVine/XVineFlightTruncChiE2020.pdf", width=4, height=4)
+
 ```
 
 
@@ -101,7 +145,7 @@ Fig 10. (c) shows a plot comparing empirical trivariate tail dependence coeffici
 Fig 11. (a) shows mBIC-values plotted across tree levels with a dotted line indicating a selected mBIC-optimal truncation level of $q^* = 7$.
 Fig 12. (b) shows a chi-plot for truncated HR X-vine with $q^*=7$.
 
-```{r, include=FALSE}
+```{r, eval=FALSE}
 # Time difference of 45.66167 secs
 # For the selection of T_1, used chi values as edge weight
 start <- Sys.time()
@@ -116,10 +160,27 @@ print( Sys.time() - start )
 
 HRXVineFlightOut$ChiLPlot
 HRXVineFlightOut$VarioPlot
+
+# For the selection of T_1, used a empirical variogram as edge weight
+HRXVineFlightOut=XVineModelFit(data = FlightDelay, N = 3600, XVS = NULL
+                , Rank = TRUE, Rank_chiL = TRUE, Rank_chi3 = TRUE
+                , Chi3_graph = TRUE, Rank_Vario = TRUE, Vario_graph = TRUE
+                , MST1_HR=TRUE, quan=0.13, tcfamset = c(1), pcfamset = c(0,1)
+                , selectioncrit = "AIC", trunclevel = FALSE, progress = TRUE
+                , treecritT1 = "variogram", treecritT2 = "tau", effsampsize = 10
+                , tau_threshold = 0.05, weights = NA, cores=1)
+HRXVineFlightOut$VineTree[[19]]$E$Copula.type
+table(do.call(c,lapply(2:28,function(i)(HRXVineFlightOut$VineTree[[i]]$E$Copula.type))))
+
+HRXVineFlightOut$mBIC_g
+HRXVineFlightOut$ChiLPlot
+HRXVineFlightOut$VarioPlot
+save(HRXVineFlightOut,file = "/Users/jlee/Desktop/XVine/Rdata/HRXVineFlightOut_E2020.Rdata")
+
 ```
 
 
-```{r, include=FALSE}
+```{r, eval=FALSE}
 # For the selection of T_1, used a empirical variogram as edge weight
 # Time difference of 45.68805 secs
 HRXVineVarioFlightOut=XVineModelFit(data = FlightDelay, N = 3600, XVS = NULL
@@ -132,6 +193,30 @@ HRXVineVarioFlightOut=XVineModelFit(data = FlightDelay, N = 3600, XVS = NULL
 HRXVineVarioFlightOut$ChiLPlot
 HRXVineVarioFlightOut$VarioPlot+
 scale_x_continuous(n.breaks = 5,limits = c(0.15,0.8))+scale_y_continuous(limits=c(0.15,0.8))+theme(plot.margin = margin(0.5, 0.5, 0.5, 0.5, "cm"))
+
+##  Exclude 2020
+HRXVineVarioFlightOut=XVineModelFit(data = FlightDelay, N = 3500, XVS = NULL
+                , Rank = TRUE, Rank_chiL = TRUE, Rank_chi3 = TRUE
+                , Chi3_graph = TRUE, Rank_Vario = TRUE, Vario_graph = TRUE
+                , MST1_HR=TRUE, quan=0.13, tcfamset = c(1), pcfamset = c(0,1)
+                , selectioncrit = "AIC", trunclevel = 6, progress = TRUE
+                , treecritT1 = "variogram", treecritT2 = "tau", effsampsize = 10
+                , tau_threshold = 0.05, weights = NA, cores=1)
+
+HRXVineVarioFlightOut$VineTree[[1]]$E$Copula.type
+sum(HRXVineVarioFlightOut$VineTree[[1]]$E$Copula.type==3)
+summary(HRXVineVarioFlightOut$VineTree[[1]]$E$weights)
+table(do.call(c,lapply(2:6,function(i)(HRXVineVarioFlightOut$VineTree[[i]]$E$Copula.type))))
+
+save(HRXVineVarioFlightOut,file = "/Users/jlee/Desktop/XVine/Rdata/HRXVineVarioFlightOut_E2020.Rdata")
+load(file = "/Users/jlee/Desktop/XVine/Rdata/HRXVineVarioFlightOut_E2020.Rdata")
+HRXVineChiE2020=HRXVineVarioFlightOut$ChiLPlot+
+scale_x_continuous(n.breaks = 5,limits = c(0.15,0.8))+scale_y_continuous(limits=c(0.15,0.8))+theme(plot.margin = margin(0.5, 0.5, 0.5, 0.5, "cm"))
+HRXVineVarioE2020=HRXVineVarioFlightOut$VarioPlot+
+  scale_x_continuous(n.breaks = 5,limits = c(0.3,0.7))+scale_y_continuous(limits=c(0.3,0.7))+theme(plot.margin = margin(0.5, 0.5, 0.5, 0.5, "cm"))+labs(title="",x=expression(paste("Empirical"," ",chi)), y = expression(paste("Fitted"," ",chi)))
+ggsave(HRXVineChiE2020, file="/Users/jlee/Desktop/XVine/HRXVineChiE2020.pdf", width=4, height=4)
+ggsave(HRXVineVarioE2020, file="/Users/jlee/Desktop/XVine/HRXVineVarioE2020.pdf", width=4, height=4)
+
 ```
 
 
@@ -160,3 +245,4 @@ Similarly, we can reproduce Fig. 13 by replacing the argument "XVineFlightOut" w
 FlightGraphPerTree=XVineFlightGraphPerTree(XVineOut = HRXVineVarioFlightOut, IATAS=dimnames(FlightDelay)[[2]], TreeLevel = 2, Color4Edge = NULL)$ggp
 FlightGraphPerTree
 ```
+

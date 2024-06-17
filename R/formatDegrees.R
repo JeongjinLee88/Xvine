@@ -9,7 +9,7 @@ formatDegrees <- function (decDeg, direction = "NS", latex = TRUE)
     dirStrings <- paste0("\\mathrm{", dirStrings, "}")
   }
   else {
-    degString <- "°"
+    degString <- "U+25CB"
     delim <- ""
   }
   decDeg <- abs(decDeg)

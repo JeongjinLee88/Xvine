@@ -98,33 +98,32 @@ vine tree structure matrix, family matrix for bivariate parametric
 (tail) copula families, and the associated parameter matrix.</p>
 </div>
 <div class="section level3">
-<h3 id="create-box-plots-of-ml-estimates-in-terms-of-dependence-measure-coefficients-using-different-nk-">3. Create box-plots of ML estimates in terms of dependence measure
-coefficients, using different (n,k).<a class="anchor" aria-label="anchor" href="#create-box-plots-of-ml-estimates-in-terms-of-dependence-measure-coefficients-using-different-nk-"></a>
+<h3 id="create-box-plots-of-parameter-estimates-for-x-vine-models-">3. Create box-plots of parameter estimates for X-vine models.<a class="anchor" aria-label="anchor" href="#create-box-plots-of-parameter-estimates-for-x-vine-models-"></a>
 </h3>
-<p><code>XVineBoxPlot()</code> creates box-plots of parameter estimates
-of dependence measure coefficients for X-vine models. In Fig 3. (a), we
-are given the X-Vine structure and selected bivariate parametric
-families. We draw multivariate Pareto random samples of size <span class="math inline">\(N=4000\)</span>. Instead of using these Pareto
-samples directly, we perform a rank transformation and take sub-samples
-to investigate results with respect to threshold exceedances. Setting a
-threshold <span class="math inline">\(k/n=0.05\)</span> of the uniform
-margin <span class="math inline">\(\widehat{U}_{i,j}\)</span>, we obtain
-ML estimates under 200 repeated iterations. We also convert the ML
-estimates to dependence measure coefficients: the tail dependence
-coefficient for <span class="math inline">\(e\in E_1\)</span> and
-Kendall’s tau for <span class="math inline">\(e\in E_i\)</span>, <span class="math inline">\(i&gt;1\)</span> using the parametric
-relationships. In Fig 3. (b), we select the families of bivariate
-parametric (tail) copulas along the vine tree sequence.</p>
-<p>In Fig. 7</p>
+<p>This section is to reproduce Fig 3. (a) and (b), and Fig7.</p>
+<p>Given the X-Vine structure and selected bivariate parametric
+families, we draw multivariate (generalized) Pareto samples of size
+<span class="math inline">\(N=4000\)</span> and set a threshold <span class="math inline">\(k/n=0.05\)</span> of the uniform margin <span class="math inline">\(\widehat{U}_{i,j}\)</span> Instead of using these
+Pareto samples directly, we perform a rank transformation and take
+sub-samples to investigate results with respect to threshold
+exceedances. We obtain ML estimates under 200 repeated iterations. We
+also convert the ML estimates to dependence measure coefficients: the
+tail dependence coefficient for <span class="math inline">\(e\in
+E_1\)</span> and Kendall’s tau for <span class="math inline">\(e\in
+E_i\)</span>, <span class="math inline">\(i&gt;1\)</span> using the
+parametric relationships. Fig 3. (a) shows box-plots of dependence
+measure estimates from specified bivairate parametric families. Varying
+<span class="math inline">\((n,k)\)</span>, we can reproduce box-plots
+in Fig. 7. For Fig 3. (b), bivariate parametric (tail) families are
+selected sequentially from the data along the vine tree sequence.</p>
 <div class="section level4">
-<h4 id="box-plots-of-ml-estimates-for-the-tail-copula-density-linked-to-a-specific-edge-">Box-plots of ML estimates for the tail copula density linked to a
+<h4 id="box-plots-of-ml-estimates-for-the-tail-copula-density-linked-to-a-specific-edge-">4. Box-plots of ML estimates for the tail copula density linked to a
 specific edge.<a class="anchor" aria-label="anchor" href="#box-plots-of-ml-estimates-for-the-tail-copula-density-linked-to-a-specific-edge-"></a>
 </h4>
-<p>Create box-plots of parameter estimates for a single parameter
-(gammas or theta, etc) Now, we consider the box-plots of ML estimates
-for the H"{u}sler-Reiss tail copula density linked to the edge <span class="math inline">\(e=\{1,2\}\in E_1\)</span>, using Similar results
-are observed with other tail copula densities.</p>
-<p>Fig 8. (a) <span class="math inline">\(n=1,000\)</span></p>
+<p>This section is to reproduce Fig 8. <code><a href="../reference/XVineBoxplot.html">XVineBoxplot()</a></code>
+creates box-plots of parameter estimates for a parameter (<span class="math inline">\(\Gamma\)</span> or <span class="math inline">\(\theta\)</span>, etc.) corresponding a specific
+edge. In Fig 8., we consider the box-plots of ML estimates for the
+H"{u}sler-Reiss tail copula density linked to the edge <span class="math inline">\(e=\{1,2\}\in E_1\)</span>, using different <span class="math inline">\((n,k)\)</span>.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># n = 1000, 2000, 4000 / k/n = 0.02, 0.05, 0.1</span></span>
 <span><span class="va">ite</span><span class="op">=</span><span class="fl">200</span></span>
@@ -138,28 +137,35 @@ are observed with other tail copula densities.</p>
 <span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_discrete.html" class="external-link">scale_x_discrete</a></span><span class="op">(</span>labels<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"k=20"</span>,<span class="st">"k=50"</span>,<span class="st">"k=100"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level4">
-<h4 id="simulation-for-the-selection-of-bivariate-parametric-families">4. Simulation for the selection of bivariate parametric
+<h4 id="simulation-for-the-selection-of-bivariate-parametric-families">5. Simulation for the selection of bivariate parametric
 families<a class="anchor" aria-label="anchor" href="#simulation-for-the-selection-of-bivariate-parametric-families"></a>
 </h4>
-<p><code>XVineFamSelSimul</code> returns simulation results of selecting
-bivariate parametric families by calling the function [XVineFamSel()].
-All information about the simulation result is saved in the list of
-<code>FamSelOut</code>. Table 1. (a) and (b)</p>
+<p>This section is to reproduce Table 1. (a) and (b).
+<code><a href="../reference/XVineFamSelSimul.html">XVineFamSelSimul()</a></code> returns simulation results of selecting
+bivariate parametric families by calling the function
+<code><a href="../reference/XVineFamSel.html">XVineFamSel()</a></code>. All information about the simulation result
+is saved in the list of <code>FamSelOut</code>.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">start</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Sys.time.html" class="external-link">Sys.time</a></span><span class="op">(</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="co"># Time difference of 1.115222 mins</span></span>
 <span><span class="va">FamSelOut</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/XVineFamSelSimul.html">XVineFamSelSimul</a></span><span class="op">(</span>N <span class="op">=</span> <span class="fl">4000</span>, qt <span class="op">=</span> <span class="fl">0.05</span>, ite <span class="op">=</span> <span class="fl">200</span>, XVS <span class="op">=</span> <span class="va">XVS</span></span>
 <span> ,edgeIndex <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">4</span>,<span class="fl">5</span><span class="op">)</span>, familyset_tc<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">4</span><span class="op">)</span>, familyset_cop <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">1</span>,<span class="fl">3</span>,<span class="fl">4</span>,<span class="fl">5</span>,<span class="fl">6</span>,<span class="fl">13</span>,<span class="fl">14</span>,<span class="fl">16</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span> <span class="fu"><a href="https://rdrr.io/r/base/Sys.time.html" class="external-link">Sys.time</a></span><span class="op">(</span><span class="op">)</span> <span class="op">-</span> <span class="va">start</span> <span class="op">)</span></span>
 <span><span class="va">FamSelOut</span><span class="op">$</span><span class="va">EdgeProp</span></span>
-<span><span class="va">FamSelOut</span><span class="op">$</span><span class="va">EffSizePercent</span></span></code></pre></div>
+<span><span class="va">FamSelOut</span><span class="op">$</span><span class="va">EffSizePercent</span></span>
+<span><span class="va">FamSelOut</span><span class="op">$</span><span class="va">GlobalProp</span></span></code></pre></div>
 </div>
 </div>
 <div class="section level3">
 <h3 id="dimensional-x-vine-specification">5. 50 dimensional X-vine specification<a class="anchor" aria-label="anchor" href="#dimensional-x-vine-specification"></a>
 </h3>
+<p>Now, we consider a 50-dimensional C-vine where the first tree
+includes the H"{u}sler–Reiss models and negative logistic models with
+randomly assigned parameter values <span class="math inline">\(\theta_e
+\in [1, 2]\)</span> for <span class="math inline">\(e \in E_1\)</span>.
+Subsequent trees contain bivariate Gaussian copulas with partial
+correlations <span class="math inline">\(\rho_e = 1.1 − 0.1j\)</span>
+for <span class="math inline">\(e \in E_j\)</span> and <span class="math inline">\(j \in \{2, . . . , 9\}\)</span>, and <span class="math inline">\(\rho_e = 0.1\)</span> for <span class="math inline">\(e \in E_j\)</span> with <span class="math inline">\(j \ge 10\)</span>.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co">##  2. A 50-dim X-vine model where HR and NL in T1 and Gaussian copulas in Ti, i&gt;1</span></span>
-<span><span class="va">Dim</span><span class="op">=</span><span class="fl">50</span></span>
+<code class="sourceCode R"><span><span class="va">Dim</span><span class="op">=</span><span class="fl">50</span></span>
 <span><span class="va">StrMtx</span><span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="fl">0</span>,nrow <span class="op">=</span> <span class="va">Dim</span>,ncol <span class="op">=</span> <span class="va">Dim</span><span class="op">)</span></span>
 <span><span class="kw">for</span><span class="op">(</span><span class="va">i</span> <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="va">Dim</span><span class="op">)</span><span class="op">{</span></span>
 <span>  <span class="kw">for</span><span class="op">(</span><span class="va">j</span> <span class="kw">in</span> <span class="va">i</span><span class="op">:</span><span class="va">Dim</span><span class="op">)</span><span class="op">{</span></span>
@@ -195,32 +201,41 @@ All information about the simulation result is saved in the list of
 <span><span class="op">}</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/diag.html" class="external-link">diag</a></span><span class="op">(</span><span class="va">ParMtx</span><span class="op">)</span><span class="op">=</span><span class="fl">0</span></span>
 <span><span class="co">##  X-Vine specification (Vine structure, Bivariate parametric families, Parameters)</span></span>
+<span><span class="co"># Time difference of 1.115222 mins</span></span>
 <span><span class="va">XVS</span><span class="op">=</span><span class="fu"><a href="../reference/XVineSpec.html">XVineSpec</a></span><span class="op">(</span>M <span class="op">=</span> <span class="va">StrMtx</span>, Mmod <span class="op">=</span> <span class="va">FamMtx</span>, Mpar <span class="op">=</span> <span class="va">ParMtx</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="fitting-x-vine-models-">6. Fitting X-vine models.<a class="anchor" aria-label="anchor" href="#fitting-x-vine-models-"></a>
 </h3>
-<p>We estimate all three components of the X-vine specification <span class="math inline">\((\mathcal{V},\mathcal{R},\mathcal{C})\)</span>. We
+<p>This section is to reproduce Fig 4. Now, we estimate all three
+components of the X-vine specification <span class="math inline">\((\mathcal{V},\mathcal{R},\mathcal{C})\)</span>. We
 draw multivariate Pareto samples of size <span class="math inline">\(n=1\,000\)</span>. Using the (lower) tail
 dependence coefficient <span class="math inline">\(\hat{\chi}_e\)</span>
 for <span class="math inline">\(e\in E_1\)</span> as edge weight and the
 Kendall’s tau <span class="math inline">\(\hat{\tau}_e\)</span> for
 <span class="math inline">\(e\in E_i\)</span>, <span class="math inline">\(i\ge 2\)</span>, we first estimate the vine tree
-sequence sequentially from <span class="math inline">\(\T_1\)</span> to
-<span class="math inline">\(\T_{d-1}\)</span> that satisfies the
+sequence sequentially from <span class="math inline">\(T_1\)</span> to
+<span class="math inline">\(T_{d-1}\)</span> that satisfies the
 proximity condition. For the purpose of capturing as much extremal
 dependence as possible in the first several trees, we find maximum
 spanning trees. After the vine tree sequence is selected, we choose
 bivariate parametric families for each edge in each tree and estimate
-the associated parameter(s).</p>
-<p>Fig. 4 (a) mBIC (b) chi-plot for a full model (c) chi-plot for
-truncated X-vine model</p>
+the associated parameter(s). Fig 4. (a) The mBIC plotted across tree
+levels with a dotted line indicating the selected mBIC-optimal
+truncation level of <span class="math inline">\(q^∗ = 19\)</span>. Fig
+4. (b) <span class="math inline">\(\chi\)</span>-plot comparing pairwise
+<span class="math inline">\(\chi\)</span> values from the specified
+X-vine model to those obtained from the fitted X-vine model via Monte
+Carlo simulations. Fig 4. (c) <span class="math inline">\(\chi\)</span>-plot for the truncated X-vine
+model.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">1953</span><span class="op">)</span></span>
-<span><span class="va">XVinePa50dim</span><span class="op">=</span><span class="fu"><a href="../reference/ParetoSim.html">ParetoSim</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">1000</span>, XVS <span class="op">=</span> <span class="va">XVS</span><span class="op">)</span> <span class="co"># Pareto scale</span></span>
+<code class="sourceCode R"><span><span class="co"># 'XVinePa50dim.Rdata' is included in the Xvine package.</span></span>
+<span><span class="co"># Time difference of 7.086743 mins</span></span>
+<span><span class="co">#set.seed(1953)</span></span>
+<span><span class="co">#XVinePa50dim=ParetoSim(n = 1000, XVS = XVS) # Pareto scale</span></span>
 <span></span>
 <span><span class="co">#Time difference of 26.23817 mins</span></span>
-<span><span class="va">XVineFitOut</span><span class="op">=</span><span class="fu"><a href="../reference/XVineModelFit.html">XVineModelFit</a></span><span class="op">(</span>data <span class="op">=</span> <span class="fl">1</span><span class="op">/</span><span class="va">Dat_P</span>, N <span class="op">=</span> <span class="fl">5000</span>, XVS <span class="op">=</span> <span class="va">XVS</span></span>
+<span><span class="va">XVineFitOut</span><span class="op">=</span><span class="fu"><a href="../reference/XVineModelFit.html">XVineModelFit</a></span><span class="op">(</span>data <span class="op">=</span> <span class="fl">1</span><span class="op">/</span><span class="va">XVinePa50dim</span>, N <span class="op">=</span> <span class="fl">5000</span>, XVS <span class="op">=</span> <span class="va">XVS</span></span>
 <span>          , Rank <span class="op">=</span> <span class="cn">FALSE</span>, Rank_chiL <span class="op">=</span> <span class="cn">FALSE</span>, Rank_chi3 <span class="op">=</span> <span class="cn">FALSE</span></span>
 <span>          , Chi3_graph <span class="op">=</span> <span class="cn">FALSE</span>, Rank_Vario <span class="op">=</span> <span class="cn">FALSE</span>, Vario_graph <span class="op">=</span> <span class="cn">FALSE</span></span>
 <span>          , tcfamset <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">4</span><span class="op">)</span>, pcfamset <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">1</span>,<span class="fl">3</span>,<span class="fl">4</span>,<span class="fl">5</span>,<span class="fl">6</span>,<span class="fl">13</span>,<span class="fl">14</span>,<span class="fl">16</span><span class="op">)</span></span>
@@ -231,7 +246,7 @@ truncated X-vine model</p>
 <span><span class="va">XVineFitOut</span><span class="op">$</span><span class="va">ChiLPlot</span></span>
 <span></span>
 <span></span>
-<span><span class="va">XVineTrunOut</span><span class="op">=</span><span class="fu"><a href="../reference/XVineModelFit.html">XVineModelFit</a></span><span class="op">(</span>data <span class="op">=</span> <span class="fl">1</span><span class="op">/</span><span class="va">Dat_P</span>, N <span class="op">=</span> <span class="fl">5000</span>, XVS <span class="op">=</span> <span class="va">XVS</span></span>
+<span><span class="va">XVineTrunOut</span><span class="op">=</span><span class="fu"><a href="../reference/XVineModelFit.html">XVineModelFit</a></span><span class="op">(</span>data <span class="op">=</span> <span class="fl">1</span><span class="op">/</span><span class="va">XVinePa50dim</span>, N <span class="op">=</span> <span class="fl">5000</span>, XVS <span class="op">=</span> <span class="va">XVS</span></span>
 <span>          , Rank <span class="op">=</span> <span class="cn">FALSE</span>, Rank_chiL <span class="op">=</span> <span class="cn">FALSE</span>, Rank_chi3 <span class="op">=</span> <span class="cn">FALSE</span></span>
 <span>          , Chi3_graph <span class="op">=</span> <span class="cn">FALSE</span>, Rank_Vario <span class="op">=</span> <span class="cn">FALSE</span>, Vario_graph <span class="op">=</span> <span class="cn">FALSE</span></span>
 <span>          , tcfamset <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">4</span><span class="op">)</span>, pcfamset <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">1</span>,<span class="fl">3</span>,<span class="fl">4</span>,<span class="fl">5</span>,<span class="fl">6</span>,<span class="fl">13</span>,<span class="fl">14</span>,<span class="fl">16</span><span class="op">)</span></span>

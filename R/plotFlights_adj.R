@@ -3,7 +3,7 @@
 #' @description
 #' 
 #' `plotFlights_adj()` creates useful figures such as the flight connections from the flight delay dataset.
-#' This function is a slight adjusted version of the function [plotFlights()] in `graphicalExtremes` package.
+#' This function is the adjusted version of the function [plotFlights()] in `graphicalExtremes` package.
 #' 
 #'
 #' @param airportIndices Character string; the indices of the airports 
@@ -32,7 +32,6 @@
 #' Engelke S, Hitz A, Gnecco N, Hentschel M (2023). _graphicalExtremes:
 #' Statistical Methodology for Graphical Extreme Value Models_. R package
 #' version 0.3.0, <https://github.com/sebastian-engelke/graphicalExtremes>
-#'
 plotFlights_adj <- function (airportIndices = NULL, airports_sel = NULL, connections_sel = NULL, 
                              graph = NULL, edgeColors, plotAirports = TRUE, plotConnections = TRUE, 
                              returnGGPlot = FALSE, useAirportNFlights = FALSE, useConnectionNFlights = FALSE, 
@@ -156,9 +155,7 @@ plotFlights_adj <- function (airportIndices = NULL, airports_sel = NULL, connect
     aesSizeEdges <- "nFlights"
   }
   ggp <- (ggplot2::ggplot() + ggplot2::xlab(NULL) + ggplot2::ylab(NULL) + 
-            ggplot2::scale_x_continuous(labels = function(x) formatDegrees(x, 
-                                                                                               "EW", useLatex)) + ggplot2::scale_y_continuous(labels = function(x) formatDegrees(x, 
-                                                                                                                                                                                                     "NS", useLatex)))
+            ggplot2::scale_x_continuous(labels = function(x) formatDegrees(x,"EW", useLatex)) + ggplot2::scale_y_continuous(labels = function(x) formatDegrees(x,"NS", useLatex)))
   if (!is.null(map)) {
     dmap <- ggplot2::map_data(map)
     ggp <- ggp + ggplot2::geom_polygon(data = dmap, ggplot2::aes_string(x = "long", 

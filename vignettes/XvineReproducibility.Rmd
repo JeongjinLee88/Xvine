@@ -109,8 +109,8 @@ theme(legend.title = element_blank()
      ,legend.key.size = unit(1, 'cm')
      ,legend.position="none"
      ,aspect.ratio = 1
-     ,axis.text.x = element_text(color="black", face="bold", size=9, angle = 30, hjust = 0.5)
-     ,axis.text.y = element_text(face="bold", size=9)
+     ,axis.text.x = element_text(color="black", face="bold", size=11, angle = 30, hjust = 0.5)
+     ,axis.text.y = element_text(face="bold", size=11)
      ,panel.background = element_rect(fill = "white"
      ,colour = "white"
      ,linewidth = 0.5, linetype = "solid")
@@ -122,6 +122,8 @@ theme(legend.title = element_blank()
 geom_segment(data = dLines, color = "red",aes(x = X, y = Y, xend = Xend, yend=Yend), inherit.aes = FALSE) + scale_x_discrete(labels=c(expression(chi[12]),expression(chi[23]),expression(chi[24]),expression(chi[45]),expression(tau[13~";"~2]),expression(tau[34~";"~2]),expression(tau[25~";"~4]),expression(tau[14~";"~23]),expression(tau[35~";"~24]),expression(tau[15~";"~234]))) +
 scale_y_continuous(breaks = seq(-0.4,0.8,0.2),limits = c(-0.4,0.8))
 BP_DEP_FAM
+ggsave(BP_DEP_FAM, file="/Users/jlee/Desktop/XVine/BP_DEP_FAM.pdf", width=4, height=4)
+
 ```
 
 
@@ -129,7 +131,7 @@ BP_DEP_FAM
 
 This section is to reproduce Fig 8.
 `XVineBoxplot()` creates box-plots of parameter estimates for a parameter ($\Gamma$ or $\theta$, etc.) corresponding a specific edge.
-In Fig 8., we consider the box-plots of ML estimates for the H\"{u}sler-Reiss tail copula density linked to the edge $e=\{1,2\}\in E_1$, using different $(n,k)$.
+In Fig 8., we consider the box-plots of ML estimates for the H&udblac;sler-Reiss tail copula density linked to the edge $e=\{1,2\}\in E_1$, using different $(n,k)$.
 
 ```{r, eval=FALSE}
 # n = 1000, 2000, 4000 / k/n = 0.02, 0.05, 0.1
@@ -165,7 +167,7 @@ FamSelOut$GlobalProp
 ### 5. 50 dimensional X-vine specification 
 
 Now, we consider a 50-dimensional C-vine where the first tree includes the
-H\"{u}sler–Reiss models and negative logistic models with randomly assigned parameter values $\theta_e \in [1, 2]$ for $e \in E_1$. 
+H&udblac;sler–Reiss models and negative logistic models with randomly assigned parameter values $\theta_e \in [1, 2]$ for $e \in E_1$. 
 Subsequent trees contain bivariate Gaussian copulas with partial correlations $\rho_e = 1.1 − 0.1j$ for $e \in E_j$ and $j \in \{2, . . . , 9\}$, and $\rho_e = 0.1$ for $e \in E_j$ with $j \ge 10$.
 
 ```{r, eval=FALSE}

@@ -67,7 +67,7 @@ A \code{ggp} object
 }
 \description{
 \code{plotFlights_adj()} creates useful figures such as the flight connections from the flight delay dataset.
-This function is a slight adjusted version of the function \code{\link[=plotFlights]{plotFlights()}} in \code{graphicalExtremes} package.
+This function is the adjusted version of the function \code{\link[=plotFlights]{plotFlights()}} in \code{graphicalExtremes} package.
 }
 \references{
 Engelke S, Hitz A, Gnecco N, Hentschel M (2023). \emph{graphicalExtremes:

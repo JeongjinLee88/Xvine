@@ -53,7 +53,7 @@ XVS=XVineSpec(M = StrMtx, Mmod = FamMtx, Mpar = ParMtx)
 
 ### 3. Simulation from X-Vine models.
 
-Given the X-Vine specification $(\mathcal{V},\mathcal{R},\mathcal{C})$, the function `XVineSim` generate random samples from $\boldsymbol{Z}^{(j)}\sim R(\boldsymbol{z})\mathbb{I}(Z^{(j)}<1)$ for each $j=1,\ldots,d$.
+Given the X-Vine specification $(\mathcal{V},\mathcal{R},\mathcal{C})$, the function `XVineSim` generate random samples from $\boldsymbol{Z}^{(j)}\sim R(\boldsymbol{z})\operatorname{I}(Z^{(j)}<1)$ for each $j=1,\ldots,d$.
 
 ```{r, include=FALSE}
 XVineSim(N = 100, XVS = XVS, k = 1)
