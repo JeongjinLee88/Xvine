@@ -101,7 +101,7 @@ parameter matrix.</p>
 </h3>
 <p>Given the X-Vine specification <span class="math inline">\((\mathcal{V},\mathcal{R},\mathcal{C})\)</span>,
 the function <code>XVineSim</code> generate random samples from <span class="math inline">\(\boldsymbol{Z}^{(j)}\sim
-R(\boldsymbol{z})\mathbb{I}(Z^{(j)}&lt;1)\)</span> for each <span class="math inline">\(j=1,\ldots,d\)</span>.</p>
+R(\boldsymbol{z})\operatorname{I}(Z^{(j)}&lt;1)\)</span> for each <span class="math inline">\(j=1,\ldots,d\)</span>.</p>
 </div>
 <div class="section level3">
 <h3 id="simulation-from-multivariate-pareto-distribution-">4. Simulation from multivariate Pareto distribution.<a class="anchor" aria-label="anchor" href="#simulation-from-multivariate-pareto-distribution-"></a>
@@ -144,11 +144,11 @@ parameter values<a class="anchor" aria-label="anchor" href="#compare-the-matrix-
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">SeqEstOut</span><span class="op">$</span><span class="va">Params</span>,<span class="fl">2</span><span class="op">)</span> <span class="co"># Parameter estimates</span></span>
 <span><span class="co">#&gt;      [,1] [,2] [,3] [,4]  [,5]</span></span>
-<span><span class="co">#&gt; [1,]    0 1.38 1.95 2.46  2.03</span></span>
-<span><span class="co">#&gt; [2,]    0 0.00 2.04 2.64  0.71</span></span>
-<span><span class="co">#&gt; [3,]    0 0.00 0.00 0.44 -0.27</span></span>
-<span><span class="co">#&gt; [4,]    0 0.00 0.00 0.00  0.10</span></span>
-<span><span class="co">#&gt; [5,]    0 0.00 0.00 0.00  0.00</span></span>
+<span><span class="co">#&gt; [1,]    0  1.5 1.96 2.50  1.93</span></span>
+<span><span class="co">#&gt; [2,]    0  0.0 1.75 2.48  0.73</span></span>
+<span><span class="co">#&gt; [3,]    0  0.0 0.00 0.29 -0.24</span></span>
+<span><span class="co">#&gt; [4,]    0  0.0 0.00 0.00  0.12</span></span>
+<span><span class="co">#&gt; [5,]    0  0.0 0.00 0.00  0.00</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">XVS</span><span class="op">$</span><span class="va">pmat</span><span class="op">[</span>,,<span class="fl">1</span><span class="op">]</span>,<span class="fl">2</span><span class="op">)</span> <span class="co"># Parameter values</span></span>
 <span><span class="co">#&gt;      [,1] [,2] [,3] [,4] [,5]</span></span>
 <span><span class="co">#&gt; [1,]    0  1.5    2  2.5  2.0</span></span>

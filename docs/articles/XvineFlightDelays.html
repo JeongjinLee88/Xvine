@@ -94,15 +94,16 @@
 </h4>
 <p>The raw data-set is accessible through the US Bureau of
 Transportation Statistics<a class="footnote-ref" tabindex="0" data-bs-toggle="popover" data-bs-content='&lt;p&gt;&lt;a href="http://www.bts.dot.gov" class="external-link uri"&gt;http://www.bts.dot.gov&lt;/a&gt;&lt;/p&gt;'><sup>1</sup></a>. These flight delay data were analysed by
-<span class="citation">@hentschel2022statistical</span> who first
-selected airports with a minimum of 1 000 flights per year and applied a
+<span class="citation">Hentschel, Engelke, and Segers (2022)</span> who
+first selected airports with a minimum of <span class="math inline">\(1000\)</span> flights per year and applied a
 k-medoids clustering algorithm to identify homogeneous clusters in terms
-of extremal dependence. Focusing on the H¨usler–Reiss family, <span class="citation">@hentschel2022statistical</span> fitted an extremal
-graphical model to large flight delays of airports in the Texas cluster
-to investigate conditional independence. Following the vignette in
-Engelke et al. [2022a], we split the data set in half: a training set
-for model fitting and a test set for tuning parameter selection. The
-dataset <code>FlightDelay</code> consists of the sample size of <span class="math inline">\(n=3603\)</span> and <span class="math inline">\(d=29\)</span> variables.</p>
+of extremal dependence. Focusing on the Hűsler–Reiss family, <span class="citation">Hentschel, Engelke, and Segers (2022)</span> fitted an
+extremal graphical model to large flight delays of airports in the Texas
+cluster to investigate conditional independence. Following the vignette
+in <span class="citation">Engelke et al. (2022)</span>, we split the
+data set in half: a training set for model fitting and a test set for
+tuning parameter selection. The dataset <code>FlightDelay</code>
+consists of the sample size of <span class="math inline">\(n=3603\)</span> and <span class="math inline">\(d=29\)</span> variables.</p>
 </div>
 <div class="section level4">
 <h4 id="fit-the-x-vine-model-to-the-whole-data-set-">3. Fit the X-vine model to the whole data set.<a class="anchor" aria-label="anchor" href="#fit-the-x-vine-model-to-the-whole-data-set-"></a>
@@ -294,6 +295,17 @@ trees of the truncated X-vine model.</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">FlightGraphPerTree</span><span class="op">=</span><span class="fu">XVineFlightGraphPerTree</span><span class="op">(</span>XVineOut <span class="op">=</span> <span class="va">HRXVineVarioFlightOut</span>, IATAS<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/dimnames.html" class="external-link">dimnames</a></span><span class="op">(</span><span class="va">FlightDelay</span><span class="op">)</span><span class="op">[[</span><span class="fl">2</span><span class="op">]</span><span class="op">]</span>, TreeLevel <span class="op">=</span> <span class="fl">2</span>, Color4Edge <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span><span class="op">$</span><span class="va">ggp</span></span>
 <span><span class="va">FlightGraphPerTree</span></span></code></pre></div>
+<div id="refs" class="references csl-bib-body hanging-indent">
+<div id="ref-engelke2graphicalextremes" class="csl-entry">
+Engelke, S, AS Hitz, N Gnecco, and M Hentschel. 2022. <span>“<span class="nocase">graphicalExtremes</span>: Statistical Methodology for
+Graphical Extreme Value Models.”</span>
+</div>
+<div id="ref-hentschel2022statistical" class="csl-entry">
+Hentschel, Manuel, Sebastian Engelke, and Johan Segers. 2022.
+<span>“Statistical Inference for <span>Hüsler–Reiss</span> Graphical
+Models Through Matrix Completions.”</span>
+</div>
+</div>
 </div>
 
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
