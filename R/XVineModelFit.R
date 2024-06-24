@@ -89,7 +89,7 @@ XVineModelFit <- function(data, Rank=TRUE, Rank_chiL=FALSE, Rank_Vario=FALSE, Ra
   if(Rank){
     Dat_U <- ParetoTransRank(data = data, u_quan = quan, scaleType = "U") 
   }else{
-    Dat_U <- 1/data #switch to Uniform scale from Pareto scale
+    Dat_U <- data #switch to Uniform scale from Pareto scale
   }
   # Determine the truncation level if specified.
   d <- ifelse(test = trunclevel,trunclevel+1,ncol(Dat_U))

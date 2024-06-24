@@ -49,8 +49,8 @@ FlightDelay=rbind(FlightTrain,FlightTest)
 
 ####    3. Fit the X-vine model to the whole data set.
 
-Fig 10. (a) shows a chi-plot comparing empirical pairwise tail dependence coefficients with those derived from the full X-vine model.
-Fig 10. (b) shows a plot comparing empirical trivariate tail dependence coefficients with those obtained from the fitted full X-vine model with $q^*=7$.
+Figure F.6. (a) shows a chi-plot comparing empirical pairwise tail dependence coefficients with those derived from the full X-vine model.
+Figure F.6. (b) shows a plot comparing empirical trivariate tail dependence coefficients with those obtained from the fitted full X-vine model with $q^*=7$.
 
 
 ```{r, eval=FALSE}
@@ -66,6 +66,11 @@ XVineFlightOut=XVineModelFit(data = FlightDelay, N = 3600, XVS = NULL
 print( Sys.time() - start )
 XVineFlightOut$ChiLPlot # chi-plot
 XVineFlightOut$mBIC_g # mBIC-plot
+TriChiPlot=XVineFlightOut$Chi3Plot +
+scale_x_continuous(n.breaks = 5,limits = c(0,0.8))+scale_y_continuous(limits=c(0,0.8))+theme(plot.margin = margin(0.5, 0.5, 0.5, 0.5, "cm")) # trichi-plot
+ggsave(TriChiPlot
+, file="/Users/jlee/Desktop/XVine/TriChiFullXVine.pdf", width=4, height=4)
+
 XVineFlightOut$VineTree[[1]]$E$Copula.type
 sum(XVineFlightOut$VineTree[[1]]$E$Copula.type==3)
 summary(XVineFlightOut$VineTree[[1]]$E$weights)
@@ -81,9 +86,10 @@ ggsave(XVineFlightmBICE2020, file="/Users/jlee/Desktop/XVine/XVineFlightmBICE202
 
 ```
 
+
 ####    4. Sensitive analysis for the mBIC-optimal truncation level across low quantiles.
 
-Fig 11. (b) shows a plot of the mBIC-optimal truncation level across a sequence of quantiles $k/n \in (0.05, 0.15)$.
+Figure F.7 (b) shows a plot of the mBIC-optimal truncation level across a sequence of quantiles $k/n \in (0.05, 0.15)$.
 
 ```{r, eval=FALSE}
 # Time difference of 15.89086 mins
@@ -101,8 +107,8 @@ ggsave(mBICout, file="/Users/jlee/Desktop/XVine/mBICsensitive.pdf", width=4, hei
 
 ####    5. Fit the X-vine model truncated at the mBIC-optimal truncation level
 
-Fig 5. (e) shows a chi-plot comparing empirical pairwise tail dependence coefficients with those from the fitted truncated X-vine model.
-
+Figure 4. (e) shows a chi-plot comparing empirical pairwise tail dependence coefficients with those from the fitted truncated X-vine model.
+Figure F.6 (c) shows a plot comparing empirical trivariate tail dependence coefficients with those obtained from the fitted truncated X-vine model with $q^*=7$.
 
 ```{r, eval=FALSE}
 # Time difference of 58.30549 secs
@@ -114,6 +120,10 @@ XVineFlightTruncOut=XVineModelFit(data = FlightDelay, N = 3600, XVS = NULL
               , treecritT1 = "chi", treecritT2 = "tau", effsampsize = 10
               , tau_threshold = 0.05, weights = NA, cores=1)
 XVineFlightTruncOut$ChiLPlot
+TriChi_Trunc=XVineFlightTruncOut$Chi3Plot +
+scale_x_continuous(n.breaks = 5,limits = c(0,0.8))+scale_y_continuous(limits=c(0,0.8))+theme(plot.margin = margin(0.5, 0.5, 0.5, 0.5, "cm")) # trichi-plot
+ggsave(TriChi_Trunc
+, file="/Users/jlee/Desktop/XVine/TriChiTruncXVine.pdf", width=4, height=4)
 
 
 # Except 2020
@@ -141,9 +151,8 @@ ggsave(XVineFlightTruncChiE2020, file="/Users/jlee/Desktop/XVine/XVineFlightTrun
 ####    6. Fit the Husler-Reiss X-vine model at the mBIC-optimal truncation level
 
 
-Fig 10. (c) shows a plot comparing empirical trivariate tail dependence coefficients with those obtained from the fitted truncated X-vine model with $q^*=7$.
-Fig 11. (a) shows mBIC-values plotted across tree levels with a dotted line indicating a selected mBIC-optimal truncation level of $q^* = 7$.
-Fig 12. (b) shows a chi-plot for truncated HR X-vine with $q^*=7$.
+Figure F.7 (a) shows mBIC-values plotted across tree levels with a dotted line indicating a selected mBIC-optimal truncation level of $q^* = 7$.
+Figure F.8 (b) shows a chi-plot for truncated HR X-vine with $q^*=7$ where we use the `Gamma2chi` function to transform the empirical variogram to the empirical chi.
 
 ```{r, eval=FALSE}
 # Time difference of 45.66167 secs
@@ -223,7 +232,7 @@ ggsave(HRXVineVarioE2020, file="/Users/jlee/Desktop/XVine/HRXVineVarioE2020.pdf"
 
 ####    7. Superimposed figure for the truncated X-vine model
 
-This section is to reproduce Fig 5. (b): The X-vine graph with the first seven trees superimposed.
+This section is to reproduce Figure 4 (b): The X-vine graph with the first seven trees superimposed.
 
 ```{r, eval=FALSE}
 FlightGraphSuperImposed=XVineFlightGraph(XVineOut = XVineFlightOut, TreeDimension = 7, IATAS = dimnames(FlightDelay)[[2]], Color4Edges = NULL)$ggp
@@ -232,14 +241,14 @@ FlightGraphSuperImposed=XVineFlightGraph(XVineOut = XVineFlightOut, TreeDimensio
 
 ####    8. Figures for an individual tree level by level for the X-vine model
 
-This section is to reproduce Fig. 9: sequential display of subsequent trees of the truncated X-vine model.
+This section is to reproduce Figure F.5: sequential display of subsequent trees of the truncated X-vine model.
 
 ```{r, eval=FALSE}
 FlightGraphPerTree=XVineFlightGraphPerTree(XVineOut = XVineFlightOut, IATAS=dimnames(FlightDelay)[[2]], TreeLevel = 1, Color4Edge = NULL)$ggp
 FlightGraphPerTree
 ```
 
-Similarly, we can reproduce Fig. 13 by replacing the argument "XVineFlightOut" with "HRXVineVarioFlightOut".
+Similarly, we can reproduce Figure F.9 by replacing the argument "XVineFlightOut" with "HRXVineVarioFlightOut".
 
 ```{r, eval=FALSE}
 FlightGraphPerTree=XVineFlightGraphPerTree(XVineOut = HRXVineVarioFlightOut, IATAS=dimnames(FlightDelay)[[2]], TreeLevel = 2, Color4Edge = NULL)$ggp

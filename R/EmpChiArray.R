@@ -20,9 +20,9 @@ EmpChiArray <- function (Dat, quan = NULL)
         Z13.2=Z[Z[,2]<1,c(1,3,2)] #(X1,X3,X2) given X2<1
         Z23.1=Z[Z[,1]<1,c(2,3,1)] #(X2,X3,X1) given X1<1
         
-        chi1 <- sum(Z12.3[,1:2] < 1)/nrow(Z12.3) # X1<1,X2<1 | X3<1
-        chi2 <- sum(Z13.2[,1:2] < 1)/nrow(Z13.2) # X1<1,X3<1 | X2<1
-        chi3 <- sum(Z23.1[,1:2] < 1)/nrow(Z23.1) # X2<1,X3<1 | X1<1
+        chi1 <- sum(apply(Z12.3[,1:2],1,function(x)all(x<1)))/nrow(Z12.3) # X1<1,X2<1 | X3<1
+        chi2 <- sum(apply(Z13.2[,1:2],1,function(x)all(x<1)))/nrow(Z13.2) # X1<1,X3<1 | X2<1
+        chi3 <- sum(apply(Z23.1[,1:2],1,function(x)all(x<1)))/nrow(Z23.1) # X2<1,X3<1 | X1<1
         chi <- mean(c(chi1,chi2,chi3))
         ChiArray[i,j,k]=chi 
       }
