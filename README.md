@@ -3,8 +3,8 @@
 
 The `Xvine` package is designed to analyze extremal dependence in
 multivariate extremes using the graphical structure of regular vines, as
-described in Kiriliouk et al. (2023). This modelling approach provides
-flexibility and enables exploration of sparsity.
+described in Kiriliouk, A., Lee, J., Segers J. (2024) "X-vine models for multivariate extremes", JRSSB, 87(3), 579–602. [[DOI]](https://doi.org/10.1093/jrsssb/qkae105). 
+This modelling approach provides flexibility and enables exploration of sparsity.
 
 Computationally, the package employs recursive approaches based on
 bivariate building blocks. The key components contain simulation from
@@ -71,8 +71,7 @@ line-spacing="2">
 
 <div id="ref-kiriliouk2023x" class="csl-entry">
 
-Kiriliouk, A., Lee, J., and Segers, J. (2023). X-vine models for
-multivariate extremes. *arXiv Preprint arXiv:2312.15205*.
+Kiriliouk, A., Lee, J., Segers J. (2024) "X-vine models for multivariate extremes", JRSSB, 87(3), 579–602. [[DOI]](https://doi.org/10.1093/jrsssb/qkae105)
 
 </div>
 
